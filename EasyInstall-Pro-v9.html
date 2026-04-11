@@ -1,0 +1,3383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="EasyInstall Pro v9 - أتمتة إعداد ويندوز. اختر تطبيقاتك وقم بتوليد أمر واحد لتثبيتها بصمت. Windows Setup Automation Tool." />
+  <meta name="keywords" content="winget, windows, installer, silent install, setup automation, EasyInstall Pro" />
+  <meta name="author" content="Omar Yakan" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>EasyInstall Pro v9 - مثبت ويندوز الصامت</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blue-400: #60a5fa;
+      --blue-500: #3b82f6;
+      --blue-600: #2563eb;
+      --blue-700: #1d4ed8;
+      --emerald-400: #34d399;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --violet-400: #a78bfa;
+      --violet-500: #8b5cf6;
+      --violet-600: #7c3aed;
+      --amber-400: #fbbf24;
+      --rose-400: #fb7185;
+      --rose-500: #f43f5e;
+      --cyan-400: #22d3ee;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --slate-950: #020617;
+      --red-400: #f87171;
+
+      --glass-bg: rgba(15, 23, 42, 0.6);
+      --glass-border: rgba(148, 163, 184, 0.1);
+      --glass-highlight: rgba(255, 255, 255, 0.05);
+      --gradient-primary: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+      --gradient-success: linear-gradient(135deg, #10b981, #34d399);
+      --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.2);
+      --radius-xl: 1rem;
+      --radius-2xl: 1.25rem;
+      --radius-3xl: 1.5rem;
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--slate-950);
+      color: var(--slate-100);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    body[dir="rtl"] {
+      font-family: 'Tajawal', 'Inter', system-ui, sans-serif;
+    }
+
+    body[dir="ltr"] {
+      font-family: 'Inter', 'Tajawal', system-ui, sans-serif;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--slate-700);
+      border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--slate-600);
+    }
+
+    /* ===== ANIMATED BG ===== */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    .bg-mesh {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(6, 182, 212, 0.04) 0%, transparent 60%);
+    }
+
+    /* ===== LAYOUT ===== */
+    .container {
+      width: 100%;
+      max-width: 1360px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ===== KEYFRAMES ===== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInBottom {
+      from {
+        opacity: 0;
+        transform: translateY(30px) translateX(-50%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) translateX(-50%);
+      }
+    }
+
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+      }
+
+      50% {
+        box-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes toastOut {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+      }
+    }
+
+    @keyframes checkmarkDraw {
+      from {
+        stroke-dashoffset: 30;
+      }
+
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes borderPulse {
+
+      0%,
+      100% {
+        border-color: rgba(59, 130, 246, 0.3);
+      }
+
+      50% {
+        border-color: rgba(59, 130, 246, 0.6);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    .animate-delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .animate-delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .animate-delay-3 {
+      animation-delay: 0.3s;
+    }
+
+    /* ===== GRADIENT TEXT ===== */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--blue-400), var(--violet-400), var(--cyan-400));
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gradient-text-emerald {
+      background: linear-gradient(135deg, var(--emerald-400), var(--cyan-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ===== HEADER ===== */
+    #app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      width: 100%;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(2, 6, 23, 0.75);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      transition: var(--transition-smooth);
+    }
+
+    #app-header.scrolled {
+      background: rgba(2, 6, 23, 0.92);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-inner {
+      max-width: 1360px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+      height: 4.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-box {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.875rem;
+      background: var(--gradient-primary);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+      transition: var(--transition-smooth);
+    }
+
+    .logo-box:hover {
+      transform: scale(1.08) rotate(-3deg);
+    }
+
+    .logo-text h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: white;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-text p {
+      font-size: 0.7rem;
+      color: var(--slate-400);
+      font-weight: 500;
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--violet-400);
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      margin-inline-start: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Search */
+    .search-wrap {
+      position: relative;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .search-wrap {
+        display: block;
+      }
+    }
+
+    .search-wrap input {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--glass-border);
+      border-radius: 0.875rem;
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+      color: var(--slate-100);
+      width: 18rem;
+      outline: none;
+      transition: var(--transition-smooth);
+      font-family: inherit;
+      backdrop-filter: blur(8px);
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--blue-500);
+      width: 22rem;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12), 0 0 20px rgba(59, 130, 246, 0.1);
+    }
+
+    .search-icon-pos {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--slate-500);
+    }
+
+    [dir="rtl"] .search-icon-pos {
+      right: 0.875rem;
+    }
+
+    [dir="ltr"] .search-icon-pos {
+      left: 0.875rem;
+    }
+
+    [dir="rtl"] .search-wrap input {
+      padding-right: 2.75rem;
+    }
+
+    [dir="ltr"] .search-wrap input {
+      padding-left: 2.75rem;
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--slate-500);
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      transition: var(--transition-smooth);
+    }
+
+    [dir="rtl"] .search-clear-btn {
+      left: 0.75rem;
+    }
+
+    [dir="ltr"] .search-clear-btn {
+      right: 0.75rem;
+    }
+
+    .search-clear-btn:hover {
+      color: white;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .search-shortcut {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--slate-600);
+      background: var(--slate-800);
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.25rem;
+      border: 1px solid var(--slate-700);
+      pointer-events: none;
+    }
+
+    [dir="rtl"] .search-shortcut {
+      left: 0.75rem;
+    }
+
+    [dir="ltr"] .search-shortcut {
+      right: 0.75rem;
+    }
+
+    /* Language switcher */
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 0.875rem;
+      padding: 0.25rem;
+      border: 1px solid var(--glass-border);
+      gap: 0.2rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .lang-btn {
+      padding: 0.35rem 0.85rem;
+      border-radius: 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      color: var(--slate-500);
+      background: transparent;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lang-btn.active {
+      background: var(--gradient-primary);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
+      color: white;
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35);
+    }
+
+    .lang-btn:not(.active):hover {
+      color: var(--slate-200);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ===== MAIN ===== */
+    main {
+      flex: 1;
+      max-width: 1360px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+      padding-block: 2.5rem;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      margin-bottom: 3.5rem;
+      text-align: center;
+      padding-block: 2rem;
+      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    .hero h2 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      color: white;
+      margin-bottom: 1.25rem;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--slate-400);
+      margin-bottom: 2.5rem;
+      max-width: 42rem;
+      margin-inline: auto;
+      line-height: 1.7;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--glass-bg);
+      color: var(--slate-300);
+      padding: 0.625rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+      transition: var(--transition-smooth);
+    }
+
+    .hero-badge:hover {
+      border-color: rgba(59, 130, 246, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .hero-badge-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: center;
+      padding: 1rem 1.5rem;
+      background: var(--glass-bg);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+      transition: var(--transition-smooth);
+      min-width: 120px;
+    }
+
+    .hero-stat:hover {
+      border-color: rgba(59, 130, 246, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .hero-stat .number {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: white;
+      font-family: 'Inter', 'JetBrains Mono', monospace;
+    }
+
+    .hero-stat .label {
+      font-size: 0.75rem;
+      color: var(--slate-400);
+      margin-top: 0.25rem;
+    }
+
+    /* ===== TABS ===== */
+    .tabs-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+    }
+
+    .tabs-inner {
+      background: var(--glass-bg);
+      padding: 0.35rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .tab-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 0.8rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      color: var(--slate-400);
+      background: transparent;
+      font-family: inherit;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn .tab-icon {
+      display: flex;
+      align-items: center;
+    }
+
+    .tab-btn.active {
+      background: var(--gradient-primary);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
+      color: white;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .tab-btn:not(.active):hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .drive-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--emerald-400);
+      padding: 0.7rem 1.5rem;
+      border-radius: var(--radius-xl);
+      font-size: 0.875rem;
+      font-weight: 700;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .drive-btn:hover {
+      background: rgba(5, 150, 105, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+    }
+
+    /* ===== LAYOUT ===== */
+    .layout-with-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .layout-with-sidebar {
+        flex-direction: row;
+      }
+
+      [dir="rtl"] .layout-with-sidebar {
+        flex-direction: row;
+      }
+    }
+
+    .sidebar {
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .sidebar {
+        width: 16rem;
+        flex-shrink: 0;
+      }
+    }
+
+    .sidebar-sticky {
+      position: sticky;
+      top: 6rem;
+    }
+
+    .cat-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--slate-500);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      padding-inline: 0.5rem;
+    }
+
+    .cat-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      color: var(--slate-400);
+      background: transparent;
+      font-family: inherit;
+      margin-bottom: 0.25rem;
+    }
+
+    .cat-btn .cat-count {
+      font-size: 0.7rem;
+      background: var(--slate-800);
+      color: var(--slate-500);
+      padding: 0.1rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+
+    .cat-btn.active {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--blue-400);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .cat-btn.active .cat-count {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--blue-400);
+    }
+
+    .cat-btn:not(.active):hover {
+      background: rgba(255, 255, 255, 0.03);
+      color: white;
+    }
+
+    .tip-box {
+      margin-top: 2rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-xl);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+    }
+
+    .tip-box h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tip-box p {
+      font-size: 0.75rem;
+      color: var(--slate-400);
+      line-height: 1.7;
+    }
+
+    /* ===== SOFTWARE GRID ===== */
+    .sw-grid-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+
+    .sw-grid-header h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.02em;
+    }
+
+    .sw-grid-header .count {
+      color: var(--slate-500);
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-inline-start: 0.5rem;
+    }
+
+    .btn-action {
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: var(--transition-smooth);
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.5rem;
+    }
+
+    .btn-action.select-all {
+      color: var(--blue-400);
+    }
+
+    .btn-action.select-all:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .btn-action.clear-sel {
+      color: var(--red-400);
+    }
+
+    .btn-action.clear-sel:hover {
+      background: rgba(248, 113, 113, 0.1);
+    }
+
+    .sw-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.875rem;
+    }
+
+    @media (min-width: 480px) {
+      .sw-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .sw-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 1400px) {
+      .sw-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .sw-card {
+      position: relative;
+      padding: 1.125rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition-smooth);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+
+    .sw-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .sw-card:hover {
+      border-color: rgba(148, 163, 184, 0.2);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .sw-card.selected {
+      background: rgba(59, 130, 246, 0.08);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.15), 0 8px 25px rgba(59, 130, 246, 0.1);
+    }
+
+    .sw-card.selected::before {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+    }
+
+    .sw-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .sw-icon-wrap {
+      width: 3.25rem;
+      height: 3.25rem;
+      border-radius: 0.875rem;
+      background: var(--slate-800);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sw-card:hover .sw-icon-wrap {
+      transform: scale(1.05);
+    }
+
+    .sw-card.selected .sw-icon-wrap {
+      box-shadow: 0 0 0 2px var(--blue-500);
+      border-color: transparent;
+    }
+
+    .sw-icon-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .sw-check {
+      width: 1.375rem;
+      height: 1.375rem;
+      border-radius: 9999px;
+      border: 2px solid var(--slate-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+      flex-shrink: 0;
+    }
+
+    .sw-card.selected .sw-check {
+      background: var(--gradient-primary);
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    .sw-card.selected .sw-check svg {
+      animation: checkmarkDraw 0.3s ease both;
+    }
+
+    .sw-card h4 {
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.9rem;
+      letter-spacing: -0.01em;
+    }
+
+    .sw-winget {
+      font-size: 0.65rem;
+      color: var(--slate-500);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .sw-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--blue-400);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .sw-link:hover {
+      color: var(--violet-400);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding-block: 5rem;
+    }
+
+    .empty-icon-wrap {
+      width: 5rem;
+      height: 5rem;
+      background: var(--glass-bg);
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-inline: auto;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--glass-border);
+    }
+
+    .empty-state h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .empty-state p {
+      color: var(--slate-500);
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ===== EXTRA COMMANDS ===== */
+    .extra-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.875rem;
+    }
+
+    @media (min-width: 768px) {
+      .extra-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .cmd-card {
+      position: relative;
+      padding: 1.25rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition-smooth);
+      backdrop-filter: blur(8px);
+    }
+
+    .cmd-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .cmd-card:hover {
+      border-color: rgba(148, 163, 184, 0.2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .cmd-card.selected {
+      background: rgba(59, 130, 246, 0.08);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.15);
+    }
+
+    .cmd-card.essential:not(.selected) {
+      border-color: rgba(59, 130, 246, 0.3);
+      background: rgba(59, 130, 246, 0.06);
+      animation: borderPulse 2s ease infinite;
+    }
+
+    .cmd-card.essential:not(.selected)::after {
+      content: '';
+      position: absolute;
+      top: 0.75rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: var(--blue-500);
+      box-shadow: 0 0 8px var(--blue-500);
+    }
+
+    [dir="rtl"] .cmd-card.essential:not(.selected)::after {
+      left: 0.75rem;
+    }
+
+    [dir="ltr"] .cmd-card.essential:not(.selected)::after {
+      right: 0.75rem;
+    }
+
+    .cmd-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .cmd-icon-wrap {
+      padding: 0.625rem;
+      border-radius: 0.625rem;
+      transition: var(--transition-smooth);
+      color: var(--slate-400);
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cmd-card.selected .cmd-icon-wrap {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--blue-400);
+    }
+
+    .cmd-card:not(.selected):hover .cmd-icon-wrap {
+      color: white;
+    }
+
+    .cmd-copy-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--slate-500);
+      padding: 0.35rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      transition: var(--transition-smooth);
+    }
+
+    .cmd-copy-btn:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .cmd-card h4 {
+      color: white;
+      font-weight: 600;
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    .cmd-check {
+      width: 1.375rem;
+      height: 1.375rem;
+      border-radius: 9999px;
+      border: 2px solid var(--slate-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+      flex-shrink: 0;
+    }
+
+    .cmd-card.selected .cmd-check {
+      background: var(--gradient-primary);
+      border-color: transparent;
+    }
+
+    /* ===== LINKS ===== */
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.875rem;
+    }
+
+    @media (min-width: 768px) {
+      .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      position: relative;
+      backdrop-filter: blur(8px);
+    }
+
+    .link-card:hover {
+      border-color: rgba(148, 163, 184, 0.2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .link-icon-wrap {
+      width: 3.25rem;
+      height: 3.25rem;
+      border-radius: 0.875rem;
+      background: var(--slate-800);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0.5rem;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .link-icon-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .link-card h4 {
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition-smooth);
+    }
+
+    .link-card:hover h4 {
+      color: var(--blue-400);
+    }
+
+    .link-card p {
+      font-size: 0.75rem;
+      color: var(--slate-500);
+      margin-top: 0.25rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 25ch;
+    }
+
+    .link-ext {
+      position: absolute;
+      color: var(--slate-600);
+      transition: var(--transition-smooth);
+    }
+
+    [dir="rtl"] .link-ext {
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    [dir="ltr"] .link-ext {
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .link-card:hover .link-ext {
+      color: var(--blue-400);
+    }
+
+    /* ===== DRIVERS ===== */
+    .drivers-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.875rem;
+    }
+
+    @media (min-width: 768px) {
+      .drivers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .driver-card {
+      padding: 1.25rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition-smooth);
+      backdrop-filter: blur(8px);
+    }
+
+    .driver-card:hover {
+      border-color: rgba(148, 163, 184, 0.2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .driver-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .driver-icon-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .driver-icon-wrap {
+      width: 3.25rem;
+      height: 3.25rem;
+      border-radius: 0.875rem;
+      background: var(--slate-800);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .driver-icon-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .driver-card h4 {
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .driver-card p {
+      font-size: 0.75rem;
+      color: var(--slate-500);
+      margin-top: 0.25rem;
+    }
+
+    .copy-driver-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      background: var(--gradient-primary);
+      background-size: 200% 200%;
+      color: white;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+      font-family: inherit;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .copy-driver-btn:hover {
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .copy-driver-btn.copied-state {
+      background: var(--gradient-success);
+    }
+
+    /* ===== FLOATING ACTION BAR ===== */
+    #action-bar {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      width: calc(100% - 2rem);
+      max-width: 52rem;
+      display: none;
+    }
+
+    #action-bar.visible {
+      display: block;
+      animation: slideInBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    .action-bar-inner {
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(24px) saturate(1.5);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: var(--radius-2xl);
+      padding: 1.25rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    }
+
+    .action-row-1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: 0.25rem;
+    }
+
+    .sel-count-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .badge {
+      background: var(--gradient-primary);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.3rem 0.65rem;
+      border-radius: 0.5rem;
+      min-width: 1.75rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    .badge-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .show-cmd-btn, .floating-clear-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--glass-border);
+      padding: 0.4rem 0.85rem;
+      border-radius: 0.6rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--blue-400);
+      font-family: inherit;
+      transition: var(--transition-smooth);
+    }
+
+    .show-cmd-btn:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .floating-clear-btn {
+      color: var(--red-400);
+    }
+
+    .floating-clear-btn:hover {
+      background: rgba(248, 113, 113, 0.1);
+    }
+
+    .cmd-preview {
+      display: none;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 0.75rem;
+      padding: 0.875rem;
+      border: 1px solid var(--glass-border);
+      margin-top: 1rem;
+      max-height: 12rem;
+      overflow-y: auto;
+    }
+
+    .cmd-preview.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .cmd-preview code {
+      font-size: 0.7rem;
+      color: var(--emerald-400);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      word-break: break-all;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    @media (min-width: 768px) {
+      .cmd-preview code {
+        font-size: 0.8rem;
+      }
+    }
+
+    .action-row-2 {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .copy-main-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.95rem;
+      border-radius: var(--radius-xl);
+      font-size: 1rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      background: var(--gradient-primary);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
+      color: white;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+      transition: var(--transition-smooth);
+      font-family: inherit;
+    }
+
+    .copy-main-btn:hover {
+      box-shadow: 0 12px 35px rgba(59, 130, 246, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .copy-main-btn.copied-state {
+      background: var(--gradient-success);
+      animation: none;
+    }
+
+    /* ===== MOBILE SEARCH ===== */
+    .mobile-search {
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-search {
+        display: none;
+      }
+    }
+
+    .mobile-search input {
+      width: 100%;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 0.85rem 1rem;
+      font-size: 0.875rem;
+      color: var(--slate-100);
+      outline: none;
+      font-family: inherit;
+      transition: var(--transition-smooth);
+      backdrop-filter: blur(8px);
+    }
+
+    [dir="rtl"] .mobile-search input {
+      padding-right: 2.75rem;
+    }
+
+    [dir="ltr"] .mobile-search input {
+      padding-left: 2.75rem;
+    }
+
+    .mobile-search input:focus {
+      border-color: var(--blue-500);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* ===== SECTION HEADERS ===== */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-header h3 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-header p {
+      color: var(--slate-400);
+      font-size: 0.9rem;
+    }
+
+    .section-title-center {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title-center h3 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title-center p {
+      color: var(--slate-400);
+      font-size: 0.9rem;
+    }
+
+    /* ===== TAB PANELS ===== */
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* ===== MODAL ===== */
+    #copy-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(8px);
+    }
+
+    #copy-modal-overlay.visible {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    #copy-modal {
+      background: var(--slate-900);
+      border: 1px solid var(--slate-700);
+      border-radius: var(--radius-2xl);
+      padding: 1.75rem;
+      width: 100%;
+      max-width: 36rem;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    #copy-modal h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #copy-modal p {
+      font-size: 0.8rem;
+      color: var(--slate-400);
+      margin-bottom: 0.75rem;
+    }
+
+    #copy-modal-text {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--glass-border);
+      border-radius: 0.75rem;
+      color: var(--emerald-400);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.75rem;
+      padding: 0.875rem;
+      resize: none;
+      height: 12rem;
+      outline: none;
+    }
+
+    .modal-close-btn {
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+      background: var(--slate-800);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.7rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: var(--transition-smooth);
+    }
+
+    .modal-close-btn:hover {
+      background: var(--slate-700);
+    }
+
+    /* ===== TOAST ===== */
+    #toast-container {
+      position: fixed;
+      bottom: 6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-xl);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      animation: toastIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+      pointer-events: auto;
+    }
+
+    .toast.out {
+      animation: toastOut 0.25s ease both;
+    }
+
+    .toast-icon {
+      display: flex;
+      align-items: center;
+    }
+
+    /* ===== SCROLL TO TOP ===== */
+    #scroll-top-btn {
+      position: fixed;
+      z-index: 45;
+      bottom: 1.5rem;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 9999px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: var(--slate-400);
+      box-shadow: var(--shadow-card);
+      transition: var(--transition-smooth);
+    }
+
+    [dir="rtl"] #scroll-top-btn {
+      left: 1.5rem;
+    }
+
+    [dir="ltr"] #scroll-top-btn {
+      right: 1.5rem;
+    }
+
+    #scroll-top-btn:hover {
+      color: white;
+      border-color: var(--blue-500);
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    #scroll-top-btn.visible {
+      display: flex;
+      animation: fadeInUp 0.3s ease both;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding-block: 3.5rem;
+      border-top: 1px solid var(--glass-border);
+      margin-top: 5rem;
+      background: rgba(2, 6, 23, 0.8);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      max-width: 1360px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-logo span {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: white;
+    }
+
+    .footer-author {
+      font-size: 0.9rem;
+      color: var(--slate-300);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-contact p {
+      font-size: 0.8rem;
+      color: var(--slate-500);
+      margin-bottom: 1rem;
+    }
+
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--emerald-600);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+      margin-bottom: 2rem;
+    }
+
+    .whatsapp-btn:hover {
+      background: #047857;
+      transform: translateY(-2px);
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: var(--slate-500);
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      font-weight: 500;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    /* ===== ICON ===== */
+    .icon {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* ===== LOADING SKELETON ===== */
+    .skeleton {
+      background: linear-gradient(90deg, var(--slate-800) 25%, var(--slate-700) 50%, var(--slate-800) 75%);
+      background-size: 400% 100%;
+      animation: shimmer 1.5s ease infinite;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ANIMATED BACKGROUND -->
+  <div class="bg-mesh"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
+
+  <!-- SCROLL TO TOP -->
+  <button id="scroll-top-btn" aria-label="Scroll to top">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <polyline points="18 15 12 9 6 15" />
+    </svg>
+  </button>
+
+  <!-- COPY MODAL (fallback) -->
+  <div id="copy-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="copy-modal-title">
+    <div id="copy-modal">
+      <h3 id="copy-modal-title">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+        <span id="copy-modal-title-text">نسخ النص يدوياً</span>
+      </h3>
+      <p id="copy-modal-hint">اضغط مطولاً على النص أدناه ثم اختر "نسخ الكل"</p>
+      <textarea id="copy-modal-text" readonly></textarea>
+      <button class="modal-close-btn" id="copy-modal-close"
+        onclick="document.getElementById('copy-modal-overlay').classList.remove('visible')">إغلاق</button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header id="app-header">
+    <div class="header-inner">
+      <div class="logo-group">
+        <div class="logo-box">
+          <svg class="icon" width="22" height="22" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1 id="hdr-title">EasyInstall Pro <span class="version-badge">v9</span></h1>
+          <p id="hdr-subtitle"></p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="search-wrap">
+          <svg class="icon search-icon-pos" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="search-desktop" autocomplete="off" />
+          <span class="search-shortcut" id="search-shortcut">Ctrl+K</span>
+          <button class="search-clear-btn hidden" id="search-clear-desktop" aria-label="Clear search">
+            <svg class="icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="lang-switcher">
+          <button class="lang-btn active" data-lang="ar" id="lang-ar">AR</button>
+          <button class="lang-btn" data-lang="en" id="lang-en">EN</button>
+          <button class="lang-btn" data-lang="tr" id="lang-tr">TR</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section class="hero" id="hero-section">
+      <h2 id="hero-title"></h2>
+      <p id="hero-subtitle"></p>
+      <div class="hero-badges">
+        <div class="hero-badge">
+          <span class="hero-badge-icon" style="background:rgba(16,185,129,0.15);color:var(--emerald-400);">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </span>
+          <span id="badge-all-updated"></span>
+        </div>
+        <div class="hero-badge">
+          <span class="hero-badge-icon" style="background:rgba(59,130,246,0.15);color:var(--blue-400);">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </span>
+          <span id="badge-secure"></span>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="number" id="stat-apps">0</div>
+          <div class="label" id="stat-apps-label"></div>
+        </div>
+        <div class="hero-stat">
+          <div class="number" id="stat-commands">0</div>
+          <div class="label" id="stat-commands-label"></div>
+        </div>
+        <div class="hero-stat">
+          <div class="number" id="stat-langs">3</div>
+          <div class="label" id="stat-langs-label"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <div class="tabs-wrap">
+      <div class="tabs-inner">
+        <button class="tab-btn active" data-tab="install" id="tab-install">
+          <span class="tab-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg></span>
+          <span></span>
+        </button>
+        <button class="tab-btn" data-tab="extra" id="tab-extra">
+          <span class="tab-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <polyline points="4 17 10 11 4 5" />
+              <line x1="12" y1="19" x2="20" y2="19" />
+            </svg></span>
+          <span></span>
+        </button>
+        <button class="tab-btn" data-tab="links" id="tab-links">
+          <span class="tab-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg></span>
+          <span></span>
+        </button>
+        <button class="tab-btn" data-tab="drivers" id="tab-drivers">
+          <span class="tab-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></span>
+          <span></span>
+        </button>
+      </div>
+      <a href="https://drive.google.com/drive/folders/1BupUo6yEpnqd5m2-P6kjBJF2SJWuwWdQ?usp=sharing" target="_blank"
+        rel="noopener noreferrer" class="drive-btn" id="drive-btn">
+        <svg class="icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+          <polyline points="15 3 21 3 21 9" />
+          <line x1="10" y1="14" x2="21" y2="3" />
+        </svg>
+        <span id="drive-link-text"></span>
+      </a>
+    </div>
+
+    <!-- TAB: Install -->
+    <div class="tab-panel active" id="panel-install">
+      <!-- Mobile Search -->
+      <div class="mobile-search">
+        <div style="position:relative;">
+          <svg class="icon search-icon-pos" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="search-mobile" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="layout-with-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-sticky">
+            <p class="cat-label" id="cat-label"></p>
+            <nav id="cat-nav"></nav>
+            <div class="tip-box">
+              <h4>
+                <svg class="icon" width="16" height="16" fill="none" stroke="var(--blue-500)" stroke-width="2"
+                  viewBox="0 0 24 24">
+                  <polyline points="4 17 10 11 4 5" />
+                  <line x1="12" y1="19" x2="20" y2="19" />
+                </svg>
+                <span id="quick-tip-title"></span>
+              </h4>
+              <p id="quick-tip-body"></p>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Grid -->
+        <div style="flex:1;min-width:0;">
+          <div class="sw-grid-header">
+            <h3 id="grid-title"><span id="grid-cat-name"></span><span class="count" id="grid-count"></span></h3>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <button class="btn-action select-all" id="btn-select-all"></button>
+              <button class="btn-action clear-sel hidden" id="btn-clear-sel"></button>
+            </div>
+          </div>
+          <div class="sw-grid" id="sw-grid"></div>
+          <div class="empty-state hidden" id="empty-state">
+            <div class="empty-icon-wrap">
+              <svg class="icon" width="32" height="32" fill="none" stroke="var(--slate-600)" stroke-width="2"
+                viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+            <h4 id="no-sw-title"></h4>
+            <p id="no-sw-body"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Extra -->
+    <div class="tab-panel" id="panel-extra">
+      <div style="max-width:56rem;margin-inline:auto;">
+        <div class="section-header">
+          <div>
+            <h3 id="extra-title"></h3>
+            <p id="extra-subtitle"></p>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <button class="btn-action select-all" id="btn-select-all-extra"></button>
+            <button class="btn-action clear-sel hidden" id="btn-clear-extra"></button>
+          </div>
+        </div>
+        <div class="extra-grid" id="extra-grid"></div>
+      </div>
+    </div>
+
+    <!-- TAB: Links -->
+    <div class="tab-panel" id="panel-links">
+      <div style="max-width:56rem;margin-inline:auto;">
+        <div class="section-title-center">
+          <h3 id="links-title"></h3>
+          <p id="links-subtitle"></p>
+        </div>
+        <div class="links-grid" id="links-grid"></div>
+      </div>
+    </div>
+
+    <!-- TAB: Drivers -->
+    <div class="tab-panel" id="panel-drivers">
+      <div style="max-width:56rem;margin-inline:auto;">
+        <div class="section-title-center">
+          <h3 id="drivers-title"></h3>
+          <p id="drivers-subtitle"></p>
+        </div>
+        <div class="drivers-grid" id="drivers-grid"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Floating Action Bar -->
+  <div id="action-bar">
+    <div class="action-bar-inner">
+      <div class="action-row-1">
+        <div class="sel-count-badge">
+          <div class="badge" id="sel-count">0</div>
+          <span class="badge-label" id="sel-label"></span>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <button class="floating-clear-btn hidden" id="floating-clear-btn"></button>
+          <button class="show-cmd-btn" id="show-cmd-btn"></button>
+        </div>
+      </div>
+      <div class="cmd-preview" id="cmd-preview">
+        <code id="cmd-preview-code"></code>
+      </div>
+      <div class="action-row-2">
+        <button class="copy-main-btn" id="copy-main-btn">
+          <svg class="icon" id="copy-main-icon" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2.5" viewBox="0 0 24 24">
+            <rect x="9" y="9" width="13" height="13" rx="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+          <svg class="icon hidden" id="copied-main-icon" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2.5" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span id="copy-main-label"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg class="icon" width="20" height="20" fill="none" stroke="var(--blue-500)" stroke-width="2.2"
+          viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span>EasyInstall Pro <span class="version-badge" style="font-size:0.55rem;">v9</span></span>
+      </div>
+      <p class="footer-author" id="footer-author"></p>
+      <div class="footer-contact">
+        <p id="footer-contact"></p>
+        <a href="https://wa.me/905355048406" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
+          <svg class="icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path
+              d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+          </svg>
+          WhatsApp
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="#" id="footer-privacy"></a>
+        <a href="#" id="footer-terms"></a>
+        <a href="#" id="footer-github"></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.onerror = function (msg, src, line, col, err) {
+      var box = document.createElement('div');
+      box.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#dc2626;color:#fff;padding:1rem;font-family:monospace;z-index:9999;font-size:0.8rem;';
+      box.textContent = 'JS Error: ' + msg + (src ? ' @ ' + src + ':' + line : '');
+      document.body.prepend(box);
+    };
+
+    try {
+      // =====================================================================
+      // PARTICLE ANIMATION
+      // =====================================================================
+      (function () {
+        var canvas = document.getElementById('particles-canvas');
+        var ctx = canvas.getContext('2d');
+        var particles = [];
+        var particleCount = 40;
+        var mouseX = -1000, mouseY = -1000;
+
+        function resize() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        document.addEventListener('mousemove', function (e) { mouseX = e.clientX; mouseY = e.clientY; });
+
+        function Particle() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.vx = (Math.random() - 0.5) * 0.4;
+          this.vy = (Math.random() - 0.5) * 0.4;
+          this.radius = Math.random() * 1.5 + 0.5;
+          this.opacity = Math.random() * 0.5 + 0.1;
+        }
+
+        for (var i = 0; i < particleCount; i++) particles.push(new Particle());
+
+        function animate() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach(function (p) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(96, 165, 250, ' + p.opacity + ')';
+            ctx.fill();
+          });
+
+          // connections
+          for (var i = 0; i < particles.length; i++) {
+            for (var j = i + 1; j < particles.length; j++) {
+              var dx = particles[i].x - particles[j].x;
+              var dy = particles[i].y - particles[j].y;
+              var dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 150) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = 'rgba(96, 165, 250, ' + (0.08 * (1 - dist / 150)) + ')';
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            }
+          }
+
+          requestAnimationFrame(animate);
+        }
+        animate();
+      })();
+
+      // =====================================================================
+      // DATA
+      // =====================================================================
+      var SOFTWARE_LIST = [
+        // Browsers
+        { id: 'chrome', name: 'Google Chrome (Latest)', wingetId: 'Google.Chrome', category: 'Browsers', icon: 'Globe', logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg', url: 'https://www.google.com/chrome/' },
+        { id: 'firefox', name: 'Mozilla Firefox (Latest)', wingetId: 'Mozilla.Firefox', category: 'Browsers', icon: 'Globe', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Firefox_logo%2C_2019.svg', url: 'https://www.mozilla.org/firefox/' },
+        { id: 'edge', name: 'Microsoft Edge (Latest)', wingetId: 'Microsoft.Edge', category: 'Browsers', icon: 'Globe', logo: 'https://icon.horse/icon/microsoft.com', url: 'https://www.microsoft.com/edge' },
+        { id: 'brave', name: 'Brave Browser (Latest)', wingetId: 'Brave.Brave', category: 'Browsers', icon: 'Globe', logo: 'https://icon.horse/icon/brave.com', url: 'https://brave.com/' },
+        // Media
+        { id: 'vlc', name: 'VLC Media Player 3.0.21', wingetId: 'VideoLAN.VLC', category: 'Media', icon: 'PlayCircle', logo: 'https://icon.horse/icon/videolan.org', url: 'https://www.videolan.org/vlc/' },
+        { id: 'spotify', name: 'Spotify Desktop (Latest)', wingetId: 'Spotify.Spotify', category: 'Media', icon: 'Music', logo: 'https://icon.horse/icon/spotify.com', url: 'https://www.spotify.com/' },
+        { id: 'obs', name: 'OBS Studio 30.1.2', wingetId: 'OBSProject.OBSStudio', category: 'Media', icon: 'Video', logo: 'https://icon.horse/icon/obsproject.com', url: 'https://obsproject.com/' },
+        // Utilities
+        { id: 'winrar', name: 'WinRAR 7.01 (x64)', wingetId: 'RARLab.WinRAR', category: 'Utilities', icon: 'Archive', logo: 'https://icon.horse/icon/rarlab.com', url: 'https://www.win-rar.com/' },
+        { id: '7zip', name: '7-Zip 24.08 (x64)', wingetId: '7zip.7zip', category: 'Utilities', icon: 'Archive', logo: 'https://icon.horse/icon/7-zip.org', url: 'https://www.7-zip.org/' },
+        { id: 'idm', name: 'Internet Download Manager 6.42', wingetId: 'Tonec.InternetDownloadManager', category: 'Utilities', icon: 'Download', logo: 'https://icon.horse/icon/internetdownloadmanager.com', url: 'https://www.internetdownloadmanager.com/' },
+        { id: 'googledrive', name: 'Google Drive (Latest)', wingetId: 'Google.GoogleDrive', category: 'Utilities', icon: 'Download', logo: 'https://icon.horse/icon/drive.google.com', url: 'https://www.google.com/drive/download/' },
+        { id: 'rustdesk', name: 'RustDesk 1.4.6 (Latest)', wingetId: 'RustDesk.RustDesk', category: 'Utilities', icon: 'Monitor', logo: 'https://icon.horse/icon/rustdesk.com', url: 'https://rustdesk.com/' },
+        { id: 'powertoys', name: 'Microsoft PowerToys 0.81.1', wingetId: 'Microsoft.PowerToys', category: 'Utilities', icon: 'Settings', logo: 'https://icon.horse/icon/microsoft.com', url: 'https://apps.microsoft.com/store/detail/microsoft-powertoys/XP89DCGQ3K6VLD' },
+        { id: 'snappy', name: 'Snappy Driver Installer Origin (سيظهر باسم SDIO.exe)', wingetId: 'GlennDelahoy.SnappyDriverInstallerOrigin', category: 'Utilities', icon: 'Download', logo: 'https://icon.horse/icon/snappy-driver-installer.en.lo4d.com', url: 'https://www.glenn.delahoy.com/snappy-driver-installer-origin/' },
+        { id: 'adobe-reader', name: 'Adobe Acrobat Reader (Latest)', wingetId: 'Adobe.Acrobat.Reader.64-bit', category: 'Utilities', icon: 'FileText', logo: 'https://icon.horse/icon/adobe.com', url: 'https://get.adobe.com/reader/' },
+        { id: 'rufus', name: 'Rufus 4.5 (Latest)', wingetId: 'Rufus.Rufus', category: 'Utilities', icon: 'Download', logo: 'https://icon.horse/icon/rufus.ie', url: 'https://rufus.ie/' },
+        { id: 'revo', name: 'Revo Uninstaller Free', wingetId: 'VSRevoGroup.RevoUninstaller', category: 'Utilities', icon: 'Trash2', logo: 'https://icons.duckduckgo.com/ip3/revouninstaller.com.ico', url: 'https://www.revouninstaller.com/revo-uninstaller-free-download/' },
+        { id: 'windirstat', name: 'WinDirStat', wingetId: 'WinDirStat.WinDirStat', category: 'Utilities', icon: 'BarChart', logo: 'https://icon.horse/icon/windirstat.net', url: 'https://windirstat.net/' },
+        { id: 'foxit-reader', name: 'Foxit PDF Reader (Latest)', wingetId: 'Foxit.FoxitReader', category: 'Utilities', icon: 'FileText', logo: 'https://icon.horse/icon/foxit.com', url: 'https://www.foxit.com/pdf-reader/' },
+        { id: 'libreoffice', name: 'LibreOffice (Latest)', wingetId: 'TheDocumentFoundation.LibreOffice', category: 'Utilities', icon: 'FileText', logo: 'https://icon.horse/icon/libreoffice.org', url: 'https://www.libreoffice.org/' },
+        {
+          id: 'ventoy', name: 'Ventoy (Latest)', wingetId: 'Ventoy.Ventoy', category: 'Utilities', icon: 'Download', logo: 'https://icons.duckduckgo.com/ip3/ventoy.net.ico', url: 'https://www.ventoy.net/',
+          postInstallCmd: '$ventoyFile = Get-ChildItem -Path "$env:LOCALAPPDATA\\Microsoft\\WinGet\\Packages\\Ventoy.Ventoy*" -Filter "Ventoy2Disk.exe" -Recurse | Select-Object -First 1\nif ($ventoyFile) {\n    $desktopPath = [System.IO.Path]::Combine([Environment]::GetFolderPath("Desktop"), "Ventoy.lnk")\n    $wshell = New-Object -ComObject WScript.Shell\n    $shortcut = $wshell.CreateShortcut($desktopPath)\n    $shortcut.TargetPath = $ventoyFile.FullName\n    $shortcut.WorkingDirectory = $ventoyFile.DirectoryName\n    $shortcut.Save()\n    Write-Host "\u2705 تم إنشاء اختصار Ventoy على سطح المكتب بنجاح!" -ForegroundColor Green\n} else {\n    Write-Host "\u274c لم يتم العثور على البرنامج، تأكد من تثبيته أولاً." -ForegroundColor Red\n}'
+        },
+        { id: 'anydesk', name: 'AnyDesk (Latest)', wingetId: 'AnyDeskSoftwareGmbH.AnyDesk', category: 'Utilities', icon: 'Monitor', logo: 'https://icon.horse/icon/anydesk.com', url: 'https://anydesk.com/' },
+        // Development
+        { id: 'vscode', name: 'Visual Studio Code 1.89', wingetId: 'Microsoft.VisualStudioCode', category: 'Development', icon: 'Code', logo: 'https://icon.horse/icon/code.visualstudio.com', url: 'https://code.visualstudio.com/' },
+        { id: 'cursor', name: 'Cursor AI Editor (Latest)', wingetId: 'Anysphere.Cursor', category: 'Development', icon: 'Code', logo: 'https://icon.horse/icon/cursor.sh', url: 'https://cursor.sh/' },
+        { id: 'lmstudio', name: 'LM Studio 0.2.23', wingetId: 'ElementLabs.LMStudio', category: 'Development', icon: 'Terminal', logo: 'https://icon.horse/icon/lmstudio.ai', url: 'https://lmstudio.ai/' },
+        { id: 'python', name: 'Python 3.12 (Latest)', wingetId: 'Python.Python.3.12', category: 'Development', icon: 'Terminal', logo: 'https://icon.horse/icon/python.org', url: 'https://www.python.org/' },
+        { id: 'git', name: 'Git for Windows 2.45.1', wingetId: 'Git.Git', category: 'Development', icon: 'GitBranch', logo: 'https://icon.horse/icon/git-scm.com', url: 'https://git-scm.com/' },
+        { id: 'nodejs', name: 'Node.js 20.13.1 (LTS)', wingetId: 'OpenJS.NodeJS.LTS', category: 'Development', icon: 'Terminal', logo: 'https://icon.horse/icon/nodejs.org', url: 'https://nodejs.org/' },
+        { id: 'virtualbox', name: 'Oracle VirtualBox (Latest)', wingetId: 'Oracle.VirtualBox', category: 'Development', icon: 'Monitor', logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Virtualbox_logo.png', url: 'https://www.virtualbox.org/' },
+        { id: 'gcloud', name: 'Google Cloud SDK', wingetId: 'Google.CloudSDK', category: 'Development', icon: 'Terminal', logo: 'https://icon.horse/icon/cloud.google.com', url: 'https://cloud.google.com/sdk' },
+        { id: 'antigravity', name: 'Google Antigravity', wingetId: 'Google.Antigravity', category: 'Development', icon: 'Monitor', logo: 'https://icons.duckduckgo.com/ip3/google.com.ico', url: 'https://google.com/' },
+        // Communication
+        { id: 'discord', name: 'Discord (Latest)', wingetId: 'Discord.Discord', category: 'Communication', icon: 'MessageSquare', logo: 'https://icon.horse/icon/discord.com', url: 'https://discord.com/' },
+        { id: 'telegram', name: 'Telegram Desktop 5.1.7', wingetId: 'Telegram.TelegramDesktop', category: 'Communication', icon: 'Send', logo: 'https://icon.horse/icon/telegram.org', url: 'https://desktop.telegram.org/' },
+        { id: 'whatsapp', name: 'WhatsApp Desktop (Latest)', wingetId: 'WhatsApp.WhatsApp', category: 'Communication', icon: 'MessageCircle', logo: 'https://icon.horse/icon/web.whatsapp.com', url: 'https://www.whatsapp.com/download' },
+        { id: 'zoom', name: 'Zoom Workplace 6.0.10', wingetId: 'Zoom.Zoom', category: 'Communication', icon: 'Video', logo: 'https://icon.horse/icon/zoom.us', url: 'https://zoom.us/' },
+        { id: 'slack', name: 'Slack 4.38.115', wingetId: 'SlackTechnologies.Slack', category: 'Communication', icon: 'MessageSquare', logo: 'https://icon.horse/icon/slack.com', url: 'https://slack.com/' },
+        // Security
+        { id: 'kaspersky-small', name: 'Kaspersky Small Office Security', wingetId: 'Kaspersky.KasperskySmallOfficeSecurity', category: 'Security', icon: 'Shield', logo: 'https://icon.horse/icon/kaspersky.com', url: 'https://www.kaspersky.com/small-business-security' },
+        { id: 'malwarebytes', name: 'Malwarebytes 5.1.3', wingetId: 'Malwarebytes.Malwarebytes', category: 'Security', icon: 'Shield', logo: 'https://icon.horse/icon/malwarebytes.com', url: 'https://www.malwarebytes.com/' },
+        { id: 'bitwarden', name: 'Bitwarden 2024.4.1', wingetId: 'Bitwarden.Bitwarden', category: 'Security', icon: 'Shield', logo: 'https://icon.horse/icon/bitwarden.com', url: 'https://bitwarden.com/' },
+        { id: 'keepassxc', name: 'KeePassXC 2.7.8', wingetId: 'KeePassXCTeam.KeePassXC', category: 'Security', icon: 'Shield', logo: 'https://icon.horse/icon/keepassxc.org', url: 'https://keepassxc.org/' },
+        // Design
+        { id: 'figma', name: 'Figma Desktop (Latest)', wingetId: 'Figma.Figma', category: 'Design', icon: 'Globe', logo: 'https://icon.horse/icon/figma.com', url: 'https://www.figma.com/downloads/' },
+        { id: 'gimp', name: 'GIMP 2.10.38', wingetId: 'GIMP.GIMP', category: 'Design', icon: 'PlayCircle', logo: 'https://icon.horse/icon/gimp.org', url: 'https://www.gimp.org/' },
+        { id: 'inkscape', name: 'Inkscape 1.3.2', wingetId: 'Inkscape.Inkscape', category: 'Design', icon: 'PlayCircle', logo: 'https://icon.horse/icon/inkscape.org', url: 'https://inkscape.org/' }
+      ];
+
+      var EXTRA_COMMANDS = [
+        { id: 'prepSource', iconSvg: 'refresh', command: '# 1. تنظيف وتجهيز المصادر (لقتل خطأ المتجر نهائياً)\nwinget source reset --force\nwinget source remove msstore\nwinget source update -n winget', isEssential: true },
+        { id: 'installRuntimes', iconSvg: 'settings', command: '# 2. تثبيت "الأساسيات" لمنع أخطاء التبعيات (مثل خطأ 0x80073cf3)\nwinget install --id Microsoft.VCRedist.2015+.x64 -e --source winget --silent --accept-package-agreements', isEssential: true },
+        { id: 'showIcons', iconSvg: 'monitor', command: '$DesktopIconsPath = "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel"\nif (-not (Test-Path $DesktopIconsPath)) {\n    New-Item -Path $DesktopIconsPath -Force | Out-Null\n}\nSet-ItemProperty -Path $DesktopIconsPath -Name "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" -Value 0 -Type DWord -Force\nSet-ItemProperty -Path $DesktopIconsPath -Name "{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}" -Value 0 -Type DWord -Force\nStop-Process -Name explorer -Force' },
+        { id: 'updateAll', iconSvg: 'refresh', command: 'winget upgrade --all --source winget --accept-package-agreements --accept-source-agreements' },
+        { id: 'enableWSL', iconSvg: 'terminal', command: 'wsl --install' },
+        { id: 'enableDirectPlay', iconSvg: 'gamepad', command: 'Enable-WindowsOptionalFeature -Online -FeatureName "DirectPlay" -All' },
+        { id: 'enableDarkMode', iconSvg: 'moon', command: '# تفعيل الوضع الداكن للتطبيقات والنظام\nSet-ItemProperty -Path HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize -Name AppsUseLightTheme -Value 0 -Type Dword -Force\nSet-ItemProperty -Path HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize -Name SystemUsesLightTheme -Value 0 -Type Dword -Force\n\n# إعادة تشغيل مستكشف ويندوز لتطبيق اللون فوراً\nStop-Process -Name explorer -Force' },
+        { id: 'disableHibernation', iconSvg: 'poweroff', command: 'powercfg.exe /hibernate off' },
+        { id: 'highPerformance', iconSvg: 'zap', command: 'powercfg -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c' },
+        { id: 'disableBing', iconSvg: 'searchx', command: 'Set-ItemProperty -Path "HKCU:\\Software\\Policies\\Microsoft\\Windows\\Explorer" -Name "DisableSearchBoxSuggestions" -Value 1 -Type DWord -Force\nStop-Process -Name explorer -Force' },
+        { id: 'classicContextMenu', iconSvg: 'mouse', command: 'reg.exe add "HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32" /f /ve\nStop-Process -Name explorer -Force' },
+        { id: 'disableTelemetry', iconSvg: 'shieldoff', command: 'Stop-Service -Name DiagTrack -Force\nSet-Service -Name DiagTrack -StartupType Disabled\nStop-Service -Name WerSvc -Force\nSet-Service -Name WerSvc -StartupType Disabled' },
+        { id: 'moveTaskbarLeft', iconSvg: 'alignleft', command: 'Set-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" -Name "TaskbarAl" -Value 0\nStop-Process -Name explorer -Force' },
+        { id: 'enableClipboardHistory', iconSvg: 'clipboard', command: 'Set-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Clipboard" -Name "EnableClipboardHistory" -Value 1 -Type DWord -Force' },
+        { id: 'disableAdApps', iconSvg: 'ban', command: 'Set-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager" -Name "SilentInstalledAppsEnabled" -Value 0 -Type DWord -Force' },
+        { id: 'disableAutoReboot', iconSvg: 'rotate', command: '$path = "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU"\nif (-not (Test-Path $path)) { New-Item -Path $path -Force | Out-Null }\nSet-ItemProperty -Path $path -Name "NoAutoRebootWithLoggedOnUsers" -Value 1 -Type DWord -Force' },
+        { id: 'menuShowDelay', iconSvg: 'timer', command: 'Set-ItemProperty -Path "HKCU:\\Control Panel\\Desktop" -Name "MenuShowDelay" -Value "0"' },
+        { id: 'numLockBoot', iconSvg: 'hash', command: 'Set-ItemProperty -Path "HKCU:\\Control Panel\\Keyboard" -Name "InitialKeyboardIndicators" -Value "2"' },
+        { id: 'updatePowershell', iconSvg: 'terminal', command: 'winget install --id Microsoft.PowerShell --source winget' },
+        { id: 'privacy2026', iconSvg: 'shield', command: '# 1. تعطيل ميزة الـ Widgets والأخبار (البديل الحديث لـ BingNews)\n# هذه الميزة هي المسؤولة عن استهلاك الرام وإرسال بيانات اهتماماتك\nGet-AppxPackage *WebExperience* | Remove-AppxPackage -ErrorAction SilentlyContinue\n\n# 2. تعطيل ميزة AI Recall (إذا كانت مدعومة في نسختك) لخصوصية قصوى\n# هذه الميزة تأخذ لقطات شاشة لكل ما تفعله، وتعطيلها من الريجستري هو الأضمن\n$registryPath = "HKCU:\\Software\\Policies\\Microsoft\\Windows\\WindowsAI"\nif (!(Test-Path $registryPath)) { New-Item -Path $registryPath -Force }\nSet-ItemProperty -Path $registryPath -Name "DisableAIDataAnalysis" -Value 1\n\n# 3. إزالة التطبيقات بأسماء الحزم الجديدة (2026)\n$ModernBloatware = @(\n    "*Microsoft.News*",           # الاسم الحديث لـ BingNews\n    "*Microsoft.Weather*",        # الطقس\n    "*Microsoft.GamingApp*",      # تطبيق Xbox الحديث\n    "*Microsoft.GetHelp*",        # الحصول على مساعدة\n    "*Microsoft.YourPhone*",      # Phone Link\n    "*Microsoft.PowerAutomate*",  # إذا كنت لا تستخدم الأتمتة المكتبية\n    "*Microsoft.BingSearch*"      # البحث المدمج في الويندوز\n)\n\nforeach ($App in $ModernBloatware) {\n    Get-AppxPackage -Name $App -AllUsers | Remove-AppxPackage -ErrorAction SilentlyContinue\n}\n\n# 4. منع "التجارب المخصصة" (التجسس على سلوك الاستخدام)\nSet-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy" -Name "TailoredExperiencesWithDiagnosticDataEnabled" -Value 0\n\n# 5. تنظيف قائمة ابدأ من "الاقتراحات" (الإعلانات المبطنة)\nSet-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" -Name "Start_IrisRecommendations" -Value 0\n\nWrite-Host "🚀 تم تحديث النظام وتنظيفه وفقاً لمعايير 2026!" -ForegroundColor Cyan' },
+        { id: 'christitus', iconSvg: 'terminal', command: 'irm christitus.com/win | iex' },
+        { id: 'fixGet', iconSvg: 'refresh', command: 'Get-AppXPackage -AllUsers -Name Microsoft.DesktopAppInstaller | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\\AppXManifest.xml"}' },
+        { id: 'updateGet', iconSvg: 'refresh', command: 'winget source remove msstore; winget source update -n winget' }
+      ];
+
+      var USEFUL_LINKS = [
+        { id: 'bazergi', name: 'Bazergi', url: 'https://www.bazergi.com/', iconUrl: 'https://icon.horse/icon/bazergi.com', description: 'Bazergi Website' },
+        { id: 'chronodivide', name: 'Chrono Divide', url: 'https://chronodivide.com/', iconUrl: 'https://icon.horse/icon/chronodivide.com', description: 'Play Red Alert 2 in your browser' },
+        { id: 'intel-assistant', name: 'Intel Driver & Support Assistant', url: 'https://www.intel.com/content/www/us/en/support/intel-driver-support-assistant.html', iconUrl: 'https://icon.horse/icon/intel.com', description: 'Automatically identify, find and install drivers for your Intel hardware.' },
+        { id: 'epson-download', name: 'Epson Download Center', url: 'https://download-center.epson.com/search/?region=TR&language=en', iconUrl: 'https://icon.horse/icon/epson.com', description: 'Find drivers, software, and manuals for your Epson products.' },
+        { id: 'alameen-soft', name: 'Al-Ameen Soft', url: 'https://downloads.alameensoft.com/', iconUrl: 'https://icon.horse/icon/alameensoft.com', description: 'Al-Ameen Soft Downloads' },
+        { id: 'osboxes', name: 'virtualbox-images', url: 'https://www.osboxes.org/virtualbox-images/', iconUrl: 'https://icon.horse/icon/osboxes.org', description: 'OSBoxes - VirtualBox Images' }
+      ];
+
+      var DRIVERS_LIST = [
+        { id: 'hp-assistant', title: 'HP Support Assistant', subtitle: 'HPInc.HPSupportAssistant', imageUrl: 'https://icon.horse/icon/hp.com', command: 'winget install -e --id HPInc.HPSupportAssistant --accept-package-agreements --accept-source-agreements' },
+        { id: 'core-runtimes', title: '', subtitle: '', imageUrl: 'https://icon.horse/icon/microsoft.com', command: 'Write-Host "جاري تثبيت المحركات الأساسية (VCRedist & .NET)..." -ForegroundColor Cyan\n\nwinget install -e --id Microsoft.VCRedist.2015+.x64 --accept-package-agreements --accept-source-agreements --silent\nwinget install -e --id Microsoft.VCRedist.2015+.x86 --accept-package-agreements --accept-source-agreements --silent\nwinget install -e --id Microsoft.DotNet.DesktopRuntime.8 --accept-package-agreements --accept-source-agreements --silent\nwinget install -e --id Microsoft.DirectX --accept-package-agreements --accept-source-agreements --silent\n\nWrite-Host "تم تثبيت المحركات بنجاح!" -ForegroundColor Green' },
+        { id: 'nvidia-app', title: '', subtitle: 'Nvidia.NvidiaApp', imageUrl: 'https://icon.horse/icon/nvidia.com', command: 'winget install -e --id Nvidia.NvidiaApp --accept-package-agreements --accept-source-agreements' },
+        { id: 'amd-adrenalin', title: 'AMD Adrenalin', subtitle: 'AMD.Adrenalin', imageUrl: 'https://icon.horse/icon/amd.com', command: 'winget install -e --id AMD.Adrenalin --accept-package-agreements --accept-source-agreements' },
+        { id: 'intel-graphics', title: '', subtitle: 'Intel.IntelGraphicsCommandCenter', imageUrl: 'https://icon.horse/icon/intel.com', command: 'winget install -e --id Intel.IntelGraphicsCommandCenter --accept-package-agreements --accept-source-agreements' }
+      ];
+
+      var TRANSLATIONS = {
+        ar: {
+          title: 'EasyInstall Pro', subtitle: 'مثبت ويندوز الصامت',
+          heroTitle: 'أتمتة إعداد <span class="gradient-text">ويندوز الخاص بك</span>',
+          heroSubtitle: 'اختر تطبيقاتك المفضلة وقم بتوليد أمر واحد لتثبيتها جميعاً بصمت. لا داعي لتحميل ملفات التثبيت أو الضغط على زر "التالي".',
+          allUpdated: 'جميع البرامج محدثة تلقائياً',
+          secureSource: 'مصادر رسمية وآمنة',
+          searchPlaceholder: 'البحث عن البرامج...',
+          categories: 'التصنيفات', quickTip: 'نصيحة سريعة',
+          adminTip: 'قم بتشغيل PowerShell أو CMD كمسؤول للحصول على أفضل تجربة.',
+          apps: 'تطبيقات', selectAll: 'تحديد الكل', clearSelection: 'مسح التحديد',
+          noSoftware: 'لم يتم العثور على برامج', tryAgain: 'حاول البحث عن شيء آخر أو تغيير التصنيف.',
+          appsSelected: 'تطبيقات مختارة', showCommand: 'إظهار الأمر', hideCommand: 'إخفاء الأمر',
+          copyCommand: 'توليد ونسخ الأمر', copied: 'تم النسخ!',
+          privacy: 'الخصوصية', terms: 'الشروط', github: 'جيت هاب',
+          driveLink: 'برامج إضافية',
+          all: 'الكل', browsers: 'متصفحات', media: 'وسائط', utilities: 'أدوات',
+          development: 'تطوير', communication: 'تواصل', security: 'حماية', design: 'تصميم',
+          developedBy: 'تم تطوير هذا العمل بواسطة عمر يكن', contactUs: 'للاستفسار تواصل معنا',
+          visitSite: 'الموقع الرسمي',
+          tabInstall: 'تثبيت البرامج', tabExtra: 'أوامر إضافية', tabLinks: 'روابط مفيدة', tabDrivers: 'تثبيت التعاريف',
+          driversTitle: 'تثبيت التعاريف', driversSubtitle: 'أوامر جاهزة لتثبيت برامج التعاريف الأساسية.',
+          coreRuntimesTitle: 'المحركات البرمجية الأساسية', coreRuntimesDesc: 'تمنع ظهور أخطاء ملفات DLL المفقودة وتثبت VCRedist و .NET.',
+          nvidiaTitle: 'NVIDIA App (الجديد)', intelTitle: 'Intel Graphics Center',
+          linksTitle: 'روابط مفيدة', linksSubtitle: 'مجموعة من الروابط الهامة والمفيدة.',
+          extraCommandsTitle: 'أوامر نظام إضافية', extraCommandsSubtitle: 'نقرة واحدة لنسخ أوامر مفيدة لتخصيص وتحسين نظام ويندوز.',
+          commandsSelected: 'أوامر مختارة',
+          manualCopyTitle: 'نسخ النص يدوياً', manualCopyHint: 'اضغط مطولاً على النص أدناه ثم اختر "نسخ الكل"',
+          statApps: 'برنامج متاح', statCommands: 'أمر جاهز', statLangs: 'لغات مدعومة',
+          toastCopied: 'تم نسخ الأمر بنجاح!', toastCopiedDriver: 'تم نسخ أمر التعريف!',
+          extraTitles: {
+            prepSource: '# 1. تنظيف وتجهيز المصادر (لقتل خطأ المتجر نهائياً)',
+            installRuntimes: '# 2. تثبيت "الأساسيات" لمنع أخطاء التبعيات (مثل خطأ 0x80073cf3)',
+            showIcons: 'إظهار أيقونات سطح المكتب (This PC & Control Panel)',
+            updateAll: 'تحديث جميع البرامج المثبتة',
+            enableWSL: 'تفعيل نظام Linux الفرعي (WSL)',
+            enableDirectPlay: 'تفعيل الميزات القديمة للألعاب (DirectPlay)',
+            enableDarkMode: 'تفعيل الوضع الداكن (Dark Mode)',
+            disableHibernation: 'إيقاف وضع الإسبات (Hibernation) لتوفير مساحة',
+            highPerformance: 'تغيير خطة الطاقة إلى "الأداء العالي"',
+            disableBing: 'تعطيل نتائج بحث Bing في قائمة ابدأ',
+            classicContextMenu: 'استعادة قائمة الزر الأيمن الكلاسيكية (ويندوز 11)',
+            disableTelemetry: 'إيقاف التتبع وجمع البيانات (حماية الخصوصية)',
+            moveTaskbarLeft: 'نقل شريط المهام وأيقونة ابدأ إلى اليسار (ويندوز 11)',
+            enableClipboardHistory: 'تفعيل سجل الحافظة (Clipboard History)',
+            disableAdApps: 'منع الويندوز من تثبيت التطبيقات الإعلانية تلقائياً',
+            disableAutoReboot: 'إيقاف إعادة تشغيل الجهاز فجأة بسبب التحديثات',
+            menuShowDelay: 'تسريع ظهور القوائم (Menu Show Delay)',
+            numLockBoot: 'تفعيل الأرقام (NumLock) تلقائياً عند الإقلاع',
+            updatePowershell: 'تحديث Power Shell',
+            privacy2026: 'أداة الخصوصية 2026',
+            christitus: 'لوحة تحكم Chris Titus',
+            fixGet: 'إصلاح أداة Get (Winget)',
+            updateGet: 'تحديث أداة Get (Winget)'
+          }
+        },
+        en: {
+          title: 'EasyInstall Pro', subtitle: 'Silent Windows Installer',
+          heroTitle: 'Automate your <span class="gradient-text">Windows Setup</span>',
+          heroSubtitle: "Select your favorite apps and generate a single command to install them all silently. No installers to download, no \"Next\" buttons to click.",
+          allUpdated: 'All programs are updated automatically',
+          secureSource: 'Official & secure sources',
+          searchPlaceholder: 'Search software...',
+          categories: 'Categories', quickTip: 'Quick Tip',
+          adminTip: 'Run PowerShell or CMD as Administrator for the best experience.',
+          apps: 'apps', selectAll: 'Select All', clearSelection: 'Clear Selection',
+          noSoftware: 'No software found', tryAgain: 'Try searching for something else or change the category.',
+          appsSelected: 'Apps Selected', showCommand: 'Show Command', hideCommand: 'Hide Command',
+          copyCommand: 'Generate & Copy Command', copied: 'Copied!',
+          privacy: 'Privacy', terms: 'Terms', github: 'GitHub',
+          driveLink: 'Extra Programs',
+          all: 'All', browsers: 'Browsers', media: 'Media', utilities: 'Utilities',
+          development: 'Development', communication: 'Communication', security: 'Security', design: 'Design',
+          developedBy: 'Developed by Omar Yakan', contactUs: 'Contact for inquiries',
+          visitSite: 'Official Site',
+          tabInstall: 'Install Apps', tabExtra: 'Extra Commands', tabLinks: 'Useful Links', tabDrivers: 'Install Drivers',
+          driversTitle: 'Install Drivers', driversSubtitle: 'Ready-to-use commands to install essential driver software.',
+          coreRuntimesTitle: 'Core Runtimes', coreRuntimesDesc: 'Prevents missing DLL errors and installs VCRedist & .NET.',
+          nvidiaTitle: 'NVIDIA App (New)', intelTitle: 'Intel Graphics Center',
+          linksTitle: 'Useful Links', linksSubtitle: 'A collection of important and useful links.',
+          extraCommandsTitle: 'Extra System Commands', extraCommandsSubtitle: 'One click to copy useful commands for customizing and optimizing Windows.',
+          commandsSelected: 'Commands Selected',
+          manualCopyTitle: 'Copy Text Manually', manualCopyHint: 'Long-press the text below then choose "Select All" and copy.',
+          statApps: 'Apps Available', statCommands: 'Commands Ready', statLangs: 'Languages',
+          toastCopied: 'Command copied successfully!', toastCopiedDriver: 'Driver command copied!',
+          extraTitles: {
+            prepSource: '# 1. Clean & Prepare Sources (Kill Store Error Forever)',
+            installRuntimes: '# 2. Install "Core Essentials" to Prevent Dependency Errors (like 0x80073cf3)',
+            showIcons: 'Show Desktop Icons (This PC & Control Panel)',
+            updateAll: 'Update All Installed Programs',
+            enableWSL: 'Enable Windows Subsystem for Linux (WSL)',
+            enableDirectPlay: 'Enable Legacy Game Features (DirectPlay)',
+            enableDarkMode: 'Enable Dark Mode',
+            disableHibernation: 'Disable Hibernation to save space',
+            highPerformance: 'Set Power Plan to High Performance',
+            disableBing: 'Disable Bing Search Results in Start Menu',
+            classicContextMenu: 'Restore Classic Context Menu (Windows 11)',
+            disableTelemetry: 'Disable Telemetry and Data Collection (Privacy)',
+            moveTaskbarLeft: 'Move Taskbar and Start Icon to Left (Windows 11)',
+            enableClipboardHistory: 'Enable Clipboard History',
+            disableAdApps: 'Prevent Windows from Auto-Installing Ad Apps',
+            disableAutoReboot: 'Prevent Sudden Restarts Due to Updates',
+            menuShowDelay: 'Speed Up Menu Show Delay',
+            numLockBoot: 'Enable NumLock Automatically on Boot',
+            updatePowershell: 'Update PowerShell',
+            privacy2026: 'Privacy Tool 2026',
+            christitus: 'Chris Titus Control Panel',
+            fixGet: 'Fix Get (Winget) Tool',
+            updateGet: 'Update Get (Winget) Tool'
+          }
+        },
+        tr: {
+          title: 'EasyInstall Pro', subtitle: 'Sessiz Windows Yükleyici',
+          heroTitle: '<span class="gradient-text">Windows Kurulumunuzu</span> Otomatikleştirin',
+          heroSubtitle: "Favori uygulamalarınızı seçin ve hepsini sessizce yüklemek için tek bir komut oluşturun. Yükleyici indirmeye, \"İleri\" düğmelerine tıklamaya gerek yok.",
+          allUpdated: 'Tüm programlar otomatik olarak güncellenir',
+          secureSource: 'Resmi ve güvenli kaynaklar',
+          searchPlaceholder: 'Yazılım ara...',
+          categories: 'Kategoriler', quickTip: 'Hızlı İpucu',
+          adminTip: "En iyi deneyim için PowerShell veya CMD'yi Yönetici olarak çalıştırın.",
+          apps: 'uygulama', selectAll: 'Hepsini Seç', clearSelection: 'Seçimi Temizle',
+          noSoftware: 'Yazılım bulunamadı', tryAgain: 'Başka bir şey aramayı deneyin veya kategoriyi değiştirin.',
+          appsSelected: 'Uygulama Seçildi', showCommand: 'Komutu Göster', hideCommand: 'Komutu Gizle',
+          copyCommand: 'Komutu Oluştur ve Kopyala', copied: 'Kopyalandı!',
+          privacy: 'Gizlilik', terms: 'Şartlar', github: 'GitHub',
+          driveLink: 'Ek Programlar',
+          all: 'Hepsi', browsers: 'Tarayıcılar', media: 'Medya', utilities: 'Araçlar',
+          development: 'Geliştirme', communication: 'İletişim', security: 'Güvenlik', design: 'Tasarım',
+          developedBy: 'Omar Yakan tarafından geliştirildi', contactUs: 'Sorularınız için iletişim',
+          visitSite: 'Resmi Site',
+          tabInstall: 'Uygulamaları Yükle', tabExtra: 'Ek Komutlar', tabLinks: 'Faydalı Bağlantılar', tabDrivers: 'Sürücüleri Yükle',
+          driversTitle: 'Sürücüleri Yükle', driversSubtitle: 'Temel sürücü yazılımlarını yüklemek için hazır komutlar.',
+          coreRuntimesTitle: 'Temel Çalışma Zamanları', coreRuntimesDesc: 'Eksik DLL hatalarını önler ve VCRedist & .NET yükler.',
+          nvidiaTitle: 'NVIDIA App (Yeni)', intelTitle: 'Intel Graphics Center',
+          linksTitle: 'Faydalı Bağlantılar', linksSubtitle: 'Önemli ve faydalı bağlantıların bir koleksiyonu.',
+          extraCommandsTitle: 'Ek Sistem Komutları', extraCommandsSubtitle: "Windows'u özelleştirmek ve optimize etmek için faydalı komutları kopyalamak için tek tık.",
+          commandsSelected: 'Komut Seçildi',
+          manualCopyTitle: 'Metni Manüel Kopyala', manualCopyHint: 'Aşağıdaki metne uzun basın ve "Tümünü Seç" seçeneğiyle kopyalayın.',
+          statApps: 'Uygulama Mevcut', statCommands: 'Komut Hazır', statLangs: 'Dil Desteği',
+          toastCopied: 'Komut başarıyla kopyalandı!', toastCopiedDriver: 'Sürücü komutu kopyalandı!',
+          extraTitles: {
+            prepSource: '# 1. Kaynakları Temizle ve Hazırla (Mağaza Hatasını Sonsuza Dek Öldür)',
+            installRuntimes: '# 2. Bağımlılık Hatalarını Önlemek İçin "Temel Bileşenleri" Yükle (örn: 0x80073cf3)',
+            showIcons: 'Masaüstü Simgelerini Göster (Bu Bilgisayar & Denetim Masası)',
+            updateAll: 'Tüm Yüklü Programları Güncelle',
+            enableWSL: 'Linux için Windows Alt Sistemini Etkinleştir (WSL)',
+            enableDirectPlay: 'Eski Oyun Özelliklerini Etkinleştir (DirectPlay)',
+            enableDarkMode: 'Karanlık Modu Etkinleştir',
+            disableHibernation: 'Yerden tasarruf etmek için Hazırda Bekletmeyi Kapat',
+            highPerformance: 'Güç Planını Yüksek Performans Olarak Ayarla',
+            disableBing: 'Başlat Menüsünde Bing Arama Sonuçlarını Devre Dışı Bırak',
+            classicContextMenu: 'Klasik Sağ Tık Menüsünü Geri Yükle (Windows 11)',
+            disableTelemetry: 'Telemetri ve Veri Toplamayı Devre Dışı Bırak (Gizlilik)',
+            moveTaskbarLeft: 'Görev Çubuğunu ve Başlat Menüsünü Sola Taşı (Windows 11)',
+            enableClipboardHistory: 'Pano Geçmişini Etkinleştir',
+            disableAdApps: "Windows'un Otomatik Olarak Reklam Uygulamaları Yüklemesini Engelle",
+            disableAutoReboot: 'Güncellemeler Nedeniyle Ani Yeniden Başlatmaları Engelle',
+            menuShowDelay: 'Menü Gösterme Gecikmesini Hızlandır',
+            numLockBoot: "Önyüklemede NumLock'u Otomatik Olarak Etkinleştir",
+            updatePowershell: 'PowerShell Güncelle',
+            privacy2026: 'Gizlilik Aracı 2026',
+            christitus: 'Chris Titus Kontrol Paneli',
+            fixGet: 'Get (Winget) Aracını Onar',
+            updateGet: 'Get (Winget) Aracını Güncelle'
+          }
+        }
+      };
+
+      // =====================================================================
+      // SVG ICONS
+      // =====================================================================
+      function svgIcon(name, size) {
+        size = size || 20;
+        var s = size;
+        var icons = {
+          download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+          globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+          check: '<polyline points="20 6 9 17 4 12"/>',
+          copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+          search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+          x: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+          externallink: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+          chevronright: '<polyline points="9 18 15 12 9 6"/>',
+          terminal: '<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>',
+          monitor: '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+          refresh: '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>',
+          settings: '<circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>',
+          gamepad: '<line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59l-.6 6A4 4 0 0 0 6.072 19h.536a2 2 0 0 0 1.79-1.106L9 16h6l.602 1.894A2 2 0 0 0 17.39 19h.536a4 4 0 0 0 3.97-4.41l-.6-6A4 4 0 0 0 17.32 5z"/>',
+          moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+          poweroff: '<path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/>',
+          zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+          searchx: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/>',
+          mouse: '<path d="M5 3a7 7 0 0 1 14 0v9a7 7 0 0 1-14 0V3z"/><line x1="12" y1="7" x2="12" y2="11"/>',
+          shieldoff: '<path d="M19.69 14a6.9 6.9 0 0 0 .31-2V5l-8-3-3.16 1.18"/><path d="M4.73 4.73L4 5v7c0 6 8 10 8 10a20.29 20.29 0 0 0 5.62-4.38"/><line x1="1" y1="1" x2="23" y2="23"/>',
+          alignleft: '<line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/>',
+          clipboard: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/>',
+          ban: '<circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>',
+          rotate: '<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/>',
+          timer: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+          hash: '<line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>',
+          shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+          message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+          chat: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>'
+        };
+        var body = icons[name] || icons['globe'];
+        return '<svg xmlns="http://www.w3.org/2000/svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">' + body + '</svg>';
+      }
+
+      // =====================================================================
+      // STATE (with localStorage persistence)
+      // =====================================================================
+      var STORAGE_KEY = 'easyinstall_pro_v8_state';
+
+      function loadState() {
+        try {
+          var saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            var parsed = JSON.parse(saved);
+            return {
+              lang: parsed.lang || 'ar',
+              activeTab: parsed.activeTab || 'install',
+              activeCategory: parsed.activeCategory || 'All',
+              searchQuery: '',
+              selectedIds: parsed.selectedIds || {},
+              selectedExtraIds: parsed.selectedExtraIds || {},
+              showCommand: false,
+              copiedMain: false,
+              copiedDriverMap: {},
+              copiedExtraMap: {}
+            };
+          }
+        } catch (e) { }
+        return null;
+      }
+
+      var state = loadState() || {
+        lang: 'ar',
+        activeTab: 'install',
+        activeCategory: 'All',
+        searchQuery: '',
+        selectedIds: {},
+        selectedExtraIds: {},
+        showCommand: false,
+        copiedMain: false,
+        copiedDriverMap: {},
+        copiedExtraMap: {}
+      };
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            lang: state.lang,
+            activeTab: state.activeTab,
+            activeCategory: state.activeCategory,
+            selectedIds: state.selectedIds,
+            selectedExtraIds: state.selectedExtraIds
+          }));
+        } catch (e) { }
+      }
+
+      // =====================================================================
+      // TOAST NOTIFICATIONS
+      // =====================================================================
+      function showToast(message, type) {
+        var container = document.getElementById('toast-container');
+        var toast = document.createElement('div');
+        toast.className = 'toast';
+        var iconColor = type === 'success' ? 'var(--emerald-400)' : 'var(--blue-400)';
+        var iconSvg = type === 'success'
+          ? '<svg width="16" height="16" fill="none" stroke="' + iconColor + '" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'
+          : '<svg width="16" height="16" fill="none" stroke="' + iconColor + '" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+        toast.innerHTML = '<span class="toast-icon">' + iconSvg + '</span>' + esc(message);
+        container.appendChild(toast);
+        setTimeout(function () {
+          toast.classList.add('out');
+          setTimeout(function () { toast.remove(); }, 300);
+        }, 2500);
+      }
+
+      // =====================================================================
+      // CLIPBOARD
+      // =====================================================================
+      function safeCopy(text, onSuccess) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            if (onSuccess) onSuccess();
+          }).catch(function () {
+            fallbackCopy(text, onSuccess);
+          });
+        } else {
+          fallbackCopy(text, onSuccess);
+        }
+      }
+
+      function fallbackCopy(text, onSuccess) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:1px;height:1px;padding:0;border:none;outline:none;boxShadow:none;background:transparent;opacity:0.01;z-index:-1';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select(); ta.setSelectionRange(0, 99999);
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (ok) { if (onSuccess) onSuccess(); }
+        else { showCopyModal(text); }
+      }
+
+      function showCopyModal(text) {
+        var t = TRANSLATIONS[state.lang];
+        document.getElementById('copy-modal-title-text').textContent = t.manualCopyTitle;
+        document.getElementById('copy-modal-hint').textContent = t.manualCopyHint;
+        document.getElementById('copy-modal-text').value = text;
+        document.getElementById('copy-modal-overlay').classList.add('visible');
+        setTimeout(function () {
+          var ta = document.getElementById('copy-modal-text');
+          ta.focus(); ta.select(); ta.setSelectionRange(0, 99999);
+        }, 100);
+      }
+
+      document.getElementById('copy-modal-overlay').addEventListener('click', function (e) {
+        if (e.target === this) this.classList.remove('visible');
+      });
+
+      // =====================================================================
+      // HELPERS
+      // =====================================================================
+      function getT() { return TRANSLATIONS[state.lang]; }
+
+      function getCategories() {
+        var seen = {}, result = ['All'];
+        SOFTWARE_LIST.forEach(function (s) {
+          if (!seen[s.category]) { seen[s.category] = true; result.push(s.category); }
+        });
+        return result;
+      }
+
+      function getCategoryCount(cat) {
+        if (cat === 'All') return SOFTWARE_LIST.length;
+        return SOFTWARE_LIST.filter(function (s) { return s.category === cat; }).length;
+      }
+
+      function getCatTranslation(cat) {
+        var t = getT();
+        var key = cat.toLowerCase();
+        return t[key] || cat;
+      }
+
+      function getFilteredSoftware() {
+        return SOFTWARE_LIST.filter(function (s) {
+          var matchCat = state.activeCategory === 'All' || s.category === state.activeCategory;
+          var q = state.searchQuery.toLowerCase();
+          var matchSearch = !q || s.name.toLowerCase().indexOf(q) !== -1 || s.wingetId.toLowerCase().indexOf(q) !== -1;
+          return matchCat && matchSearch;
+        });
+      }
+
+      function getFilteredExtra() {
+        var q = state.searchQuery.toLowerCase();
+        var t = getT();
+        return EXTRA_COMMANDS.filter(function (c) {
+          var title = t.extraTitles[c.id] || '';
+          return !q || title.toLowerCase().indexOf(q) !== -1 || c.command.toLowerCase().indexOf(q) !== -1;
+        });
+      }
+
+      function getFilteredLinks() {
+        var q = state.searchQuery.toLowerCase();
+        return USEFUL_LINKS.filter(function (l) {
+          return !q || l.name.toLowerCase().indexOf(q) !== -1 || l.description.toLowerCase().indexOf(q) !== -1;
+        });
+      }
+
+      function getFilteredDrivers() {
+        var q = state.searchQuery.toLowerCase();
+        var t = getT();
+        return DRIVERS_LIST.filter(function (d) {
+          var title = d.id === 'core-runtimes' ? t.coreRuntimesTitle :
+            d.id === 'nvidia-app' ? t.nvidiaTitle :
+              d.id === 'intel-graphics' ? t.intelTitle : d.title;
+          return !q || title.toLowerCase().indexOf(q) !== -1 || d.subtitle.toLowerCase().indexOf(q) !== -1;
+        });
+      }
+
+      function generateInstallCommand() {
+        var selected = SOFTWARE_LIST.filter(function (s) { return state.selectedIds[s.id] && s.wingetId; });
+        if (!selected.length) return '';
+        var cmds = selected.map(function (s) {
+          return 'winget install -e --id ' + s.wingetId + ' --silent --accept-package-agreements --accept-source-agreements --source winget';
+        });
+        var post = selected.filter(function (s) { return s.postInstallCmd; }).map(function (s) { return s.postInstallCmd; });
+        return cmds.concat(post).join('\n\n');
+      }
+
+      function generateExtraCommand() {
+        var selected = EXTRA_COMMANDS.filter(function (c) { return state.selectedExtraIds[c.id]; });
+        return selected.map(function (c) { return c.command; }).join('\n\n');
+      }
+
+      function countSelected() {
+        return Object.keys(state.selectedIds).filter(function (k) { return state.selectedIds[k]; }).length;
+      }
+
+      function countSelectedExtra() {
+        return Object.keys(state.selectedExtraIds).filter(function (k) { return state.selectedExtraIds[k]; }).length;
+      }
+
+      // =====================================================================
+      // ANIMATED COUNTER
+      // =====================================================================
+      function animateCounter(el, target) {
+        var start = 0;
+        var duration = 1200;
+        var startTime = null;
+        function step(timestamp) {
+          if (!startTime) startTime = timestamp;
+          var progress = Math.min((timestamp - startTime) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.floor(eased * target);
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      // =====================================================================
+      // RENDER
+      // =====================================================================
+      function renderAll() {
+        var t = getT();
+        var isRtl = state.lang === 'ar';
+
+        document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+        document.documentElement.lang = state.lang;
+        document.body.dir = isRtl ? 'rtl' : 'ltr';
+
+        // Header
+        document.getElementById('hdr-subtitle').textContent = t.subtitle;
+
+        // Lang buttons
+        ['ar', 'en', 'tr'].forEach(function (l) {
+          var btn = document.getElementById('lang-' + l);
+          btn.className = 'lang-btn' + (state.lang === l ? ' active' : '');
+        });
+
+        // Search
+        ['search-desktop', 'search-mobile'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.placeholder = t.searchPlaceholder;
+        });
+
+        // Hero
+        document.getElementById('hero-title').innerHTML = t.heroTitle;
+        document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
+        document.getElementById('badge-all-updated').textContent = t.allUpdated;
+        document.getElementById('badge-secure').textContent = t.secureSource;
+
+        // Hero stats
+        document.getElementById('stat-apps-label').textContent = t.statApps;
+        document.getElementById('stat-commands-label').textContent = t.statCommands;
+        document.getElementById('stat-langs-label').textContent = t.statLangs;
+
+        // Tabs
+        document.getElementById('tab-install').querySelector('span:last-child').textContent = t.tabInstall;
+        document.getElementById('tab-extra').querySelector('span:last-child').textContent = t.tabExtra;
+        document.getElementById('tab-links').querySelector('span:last-child').textContent = t.tabLinks;
+        document.getElementById('tab-drivers').querySelector('span:last-child').textContent = t.tabDrivers;
+        document.getElementById('drive-link-text').textContent = t.driveLink;
+
+        // Tab active states
+        document.querySelectorAll('.tab-btn').forEach(function (btn) {
+          btn.classList.toggle('active', btn.dataset.tab === state.activeTab);
+        });
+
+        // Panels
+        document.querySelectorAll('.tab-panel').forEach(function (p) {
+          p.classList.toggle('active', p.id === 'panel-' + state.activeTab);
+        });
+
+        // Sidebar
+        document.getElementById('cat-label').textContent = t.categories;
+        document.getElementById('quick-tip-title').textContent = t.quickTip;
+        document.getElementById('quick-tip-body').textContent = t.adminTip;
+
+        // Search shortcut visibility
+        var shortcut = document.getElementById('search-shortcut');
+        var searchVal = document.getElementById('search-desktop').value;
+        if (shortcut) shortcut.style.display = searchVal ? 'none' : 'block';
+
+        renderCategoryNav();
+        renderSoftwareGrid();
+        renderExtraGrid();
+        renderLinksGrid();
+        renderDriversGrid();
+        renderActionBar();
+        renderFooter();
+
+        saveState();
+      }
+
+      function renderCategoryNav() {
+        var t = getT();
+        var nav = document.getElementById('cat-nav');
+        var isRtl = state.lang === 'ar';
+        var categories = getCategories();
+        var html = '';
+        categories.forEach(function (cat) {
+          var isActive = state.activeCategory === cat;
+          var count = getCategoryCount(cat);
+          html += '<button class="cat-btn' + (isActive ? ' active' : '') + '" data-cat="' + cat + '">';
+          html += '<span>' + getCatTranslation(cat) + '</span>';
+          html += '<span class="cat-count">' + count + '</span>';
+          html += '</button>';
+        });
+        nav.innerHTML = html;
+        nav.querySelectorAll('.cat-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            state.activeCategory = this.dataset.cat;
+            renderAll();
+          });
+        });
+      }
+
+      function renderSoftwareGrid() {
+        var t = getT();
+        var filtered = getFilteredSoftware();
+        var isRtl = state.lang === 'ar';
+
+        document.getElementById('grid-cat-name').textContent = getCatTranslation(state.activeCategory);
+        document.getElementById('grid-count').textContent = ' (' + filtered.length + ' ' + t.apps + ')';
+
+        var selAllBtn = document.getElementById('btn-select-all');
+        selAllBtn.textContent = t.selectAll;
+        var clearBtn = document.getElementById('btn-clear-sel');
+        var cnt = countSelected();
+        if (cnt > 0) {
+          clearBtn.textContent = t.clearSelection + ' (' + cnt + ')';
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+
+        var grid = document.getElementById('sw-grid');
+        var emptyEl = document.getElementById('empty-state');
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '';
+          emptyEl.classList.remove('hidden');
+          document.getElementById('no-sw-title').textContent = t.noSoftware;
+          document.getElementById('no-sw-body').textContent = t.tryAgain;
+          return;
+        }
+        emptyEl.classList.add('hidden');
+
+        var html = '';
+        filtered.forEach(function (sw, idx) {
+          var isSel = !!state.selectedIds[sw.id];
+          html += '<div class="sw-card' + (isSel ? ' selected' : '') + '" data-id="' + sw.id + '" id="swcard-' + sw.id + '" style="animation-delay:' + (idx * 0.03) + 's">';
+          html += '<div class="sw-card-top">';
+          html += '<div class="sw-icon-wrap">';
+          if (sw.logo) {
+            html += '<img src="' + sw.logo + '" alt="' + esc(sw.name) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">';
+            html += '<span style="display:none;align-items:center;justify-content:center;color:var(--slate-500);">' + svgIcon('globe', 24) + '</span>';
+          } else {
+            html += '<span style="display:flex;align-items:center;justify-content:center;color:var(--slate-500);">' + svgIcon('globe', 24) + '</span>';
+          }
+          html += '</div>';
+          html += '<div class="sw-check">' + (isSel ? svgIcon('check', 12) : '') + '</div>';
+          html += '</div>';
+          html += '<h4>' + esc(sw.name) + '</h4>';
+          html += '<p class="sw-winget">' + esc(sw.wingetId) + '</p>';
+          html += '<a href="' + sw.url + '" target="_blank" rel="noopener noreferrer" class="sw-link" onclick="event.stopPropagation();">' + svgIcon('externallink', 10) + ' ' + esc(t.visitSite) + '</a>';
+          html += '</div>';
+        });
+        grid.innerHTML = html;
+
+        grid.querySelectorAll('.sw-card').forEach(function (card) {
+          card.addEventListener('click', function () {
+            var id = this.dataset.id;
+            state.selectedIds[id] = !state.selectedIds[id];
+            renderAll();
+          });
+        });
+      }
+
+      function renderExtraGrid() {
+        var t = getT();
+        var filtered = getFilteredExtra();
+        var cntExtra = countSelectedExtra();
+
+        var selAllExtra = document.getElementById('btn-select-all-extra');
+        selAllExtra.textContent = t.selectAll;
+        var clearExtra = document.getElementById('btn-clear-extra');
+        if (cntExtra > 0) {
+          clearExtra.textContent = t.clearSelection + ' (' + cntExtra + ')';
+          clearExtra.classList.remove('hidden');
+        } else {
+          clearExtra.classList.add('hidden');
+        }
+
+        document.getElementById('extra-title').textContent = t.extraCommandsTitle;
+        document.getElementById('extra-subtitle').textContent = t.extraCommandsSubtitle;
+
+        var grid = document.getElementById('extra-grid');
+        var html = '';
+        filtered.forEach(function (cmd) {
+          var isSel = !!state.selectedExtraIds[cmd.id];
+          var title = t.extraTitles[cmd.id] || cmd.id;
+          var isCopied = !!state.copiedExtraMap[cmd.id];
+          var essentialClass = cmd.isEssential && !isSel ? ' essential' : '';
+          html += '<div class="cmd-card' + (isSel ? ' selected' : '') + essentialClass + '" data-id="' + cmd.id + '">';
+          html += '<div class="cmd-card-top">';
+          html += '<div style="display:flex;align-items:center;gap:0.75rem;">';
+          html += '<div class="cmd-icon-wrap">' + svgIcon(cmd.iconSvg || 'terminal', 24) + '</div>';
+          html += '<div class="cmd-check">' + (isSel ? svgIcon('check', 12) : '') + '</div>';
+          html += '</div>';
+          html += '<button class="cmd-copy-btn" data-id="' + cmd.id + '" onclick="event.stopPropagation();copyExtraCmd(\'' + cmd.id + '\');">';
+          html += (isCopied ? '<span style="color:var(--emerald-400);">' + svgIcon('check', 16) + '</span>' : svgIcon('copy', 16));
+          html += '</button>';
+          html += '</div>';
+          html += '<h4>' + esc(title) + '</h4>';
+          html += '</div>';
+        });
+        grid.innerHTML = html;
+
+        grid.querySelectorAll('.cmd-card').forEach(function (card) {
+          card.addEventListener('click', function () {
+            var id = this.dataset.id;
+            state.selectedExtraIds[id] = !state.selectedExtraIds[id];
+            renderAll();
+          });
+        });
+      }
+
+      function renderLinksGrid() {
+        var t = getT();
+        var filtered = getFilteredLinks();
+
+        document.getElementById('links-title').textContent = t.linksTitle;
+        document.getElementById('links-subtitle').textContent = t.linksSubtitle;
+
+        var grid = document.getElementById('links-grid');
+        var html = '';
+        filtered.forEach(function (link) {
+          html += '<a href="' + link.url + '" target="_blank" rel="noopener noreferrer" class="link-card">';
+          html += '<div class="link-icon-wrap">';
+          html += '<img src="' + link.iconUrl + '" alt="' + esc(link.name) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">';
+          html += '<span style="display:none;align-items:center;justify-content:center;color:var(--slate-500);">' + svgIcon('globe', 24) + '</span>';
+          html += '</div>';
+          html += '<div style="flex:1;min-width:0;">';
+          html += '<h4>' + esc(link.name) + '</h4>';
+          html += '<p>' + esc(link.url) + '</p>';
+          html += '</div>';
+          html += '<span class="link-ext">' + svgIcon('externallink', 16) + '</span>';
+          html += '</a>';
+        });
+        grid.innerHTML = html;
+      }
+
+      function renderDriversGrid() {
+        var t = getT();
+        var filtered = getFilteredDrivers();
+
+        document.getElementById('drivers-title').textContent = t.driversTitle;
+        document.getElementById('drivers-subtitle').textContent = t.driversSubtitle;
+
+        var grid = document.getElementById('drivers-grid');
+        var html = '';
+        filtered.forEach(function (driver) {
+          var title = driver.id === 'core-runtimes' ? t.coreRuntimesTitle :
+            driver.id === 'nvidia-app' ? t.nvidiaTitle :
+              driver.id === 'intel-graphics' ? t.intelTitle : driver.title;
+          var subtitle = driver.id === 'core-runtimes' ? t.coreRuntimesDesc : driver.subtitle;
+          var isCopied = !!state.copiedDriverMap[driver.id];
+          html += '<div class="driver-card">';
+          html += '<div class="driver-card-top">';
+          html += '<div class="driver-icon-group">';
+          html += '<div class="driver-icon-wrap">';
+          html += '<img src="' + driver.imageUrl + '" alt="' + esc(title) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">';
+          html += '<span style="display:none;align-items:center;justify-content:center;color:var(--slate-500);">' + svgIcon('globe', 24) + '</span>';
+          html += '</div>';
+          html += '<div>';
+          html += '<h4>' + esc(title) + '</h4>';
+          html += '<p>' + esc(subtitle) + '</p>';
+          html += '</div>';
+          html += '</div>';
+          html += '</div>';
+          html += '<button class="copy-driver-btn' + (isCopied ? ' copied-state' : '') + '" onclick="copyDriverCmd(\'' + driver.id + '\');">';
+          if (isCopied) {
+            html += svgIcon('check', 16) + ' ' + esc(t.copied);
+          } else {
+            html += svgIcon('copy', 16) + ' ' + esc(t.copyCommand);
+          }
+          html += '</button>';
+          html += '</div>';
+        });
+        grid.innerHTML = html;
+      }
+
+      function renderActionBar() {
+        var t = getT();
+        var cntSw = countSelected();
+        var cntEx = countSelectedExtra();
+        var bar = document.getElementById('action-bar');
+        var showBar = (state.activeTab === 'install' && cntSw > 0) || (state.activeTab === 'extra' && cntEx > 0);
+
+        if (showBar) {
+          bar.classList.add('visible');
+        } else {
+          bar.classList.remove('visible');
+          state.showCommand = false;
+        }
+
+        var cnt = state.activeTab === 'install' ? cntSw : cntEx;
+        document.getElementById('sel-count').textContent = cnt;
+        document.getElementById('sel-label').textContent = state.activeTab === 'install' ? t.appsSelected : t.commandsSelected;
+
+        var showBtn = document.getElementById('show-cmd-btn');
+        showBtn.textContent = state.showCommand ? t.hideCommand : t.showCommand;
+        
+        var floatingClear = document.getElementById('floating-clear-btn');
+        if (floatingClear) {
+          floatingClear.textContent = t.clearSelection;
+          if (cnt > 0) {
+            floatingClear.classList.remove('hidden');
+          } else {
+            floatingClear.classList.add('hidden');
+          }
+        }
+
+        var preview = document.getElementById('cmd-preview');
+        var previewCode = document.getElementById('cmd-preview-code');
+        if (state.showCommand) {
+          preview.classList.add('visible');
+          previewCode.textContent = state.activeTab === 'install' ? generateInstallCommand() : generateExtraCommand();
+        } else {
+          preview.classList.remove('visible');
+        }
+
+        var copyBtn = document.getElementById('copy-main-btn');
+        var copyIcon = document.getElementById('copy-main-icon');
+        var copiedIcon = document.getElementById('copied-main-icon');
+        var copyLabel = document.getElementById('copy-main-label');
+
+        if (state.copiedMain) {
+          copyBtn.classList.add('copied-state');
+          copyIcon.classList.add('hidden');
+          copiedIcon.classList.remove('hidden');
+          copyLabel.textContent = t.copied;
+        } else {
+          copyBtn.classList.remove('copied-state');
+          copyIcon.classList.remove('hidden');
+          copiedIcon.classList.add('hidden');
+          copyLabel.textContent = t.copyCommand;
+        }
+      }
+
+      function renderFooter() {
+        var t = getT();
+        document.getElementById('footer-author').textContent = t.developedBy;
+        document.getElementById('footer-contact').textContent = t.contactUs;
+        document.getElementById('footer-privacy').textContent = t.privacy;
+        document.getElementById('footer-terms').textContent = t.terms;
+        document.getElementById('footer-github').textContent = t.github;
+      }
+
+      // =====================================================================
+      // ESCAPE HTML
+      // =====================================================================
+      function esc(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // =====================================================================
+      // GLOBAL HANDLERS
+      // =====================================================================
+      function copyExtraCmd(id) {
+        var cmd = EXTRA_COMMANDS.find(function (c) { return c.id === id; });
+        if (!cmd) return;
+        var t = getT();
+        safeCopy(cmd.command, function () {
+          state.copiedExtraMap[id] = true;
+          showToast(t.toastCopied, 'success');
+          renderAll();
+          setTimeout(function () { state.copiedExtraMap[id] = false; renderAll(); }, 2000);
+        });
+      }
+
+      function copyDriverCmd(id) {
+        var driver = DRIVERS_LIST.find(function (d) { return d.id === id; });
+        if (!driver) return;
+        var t = getT();
+        safeCopy(driver.command, function () {
+          state.copiedDriverMap[id] = true;
+          showToast(t.toastCopiedDriver, 'success');
+          renderAll();
+          setTimeout(function () { state.copiedDriverMap[id] = false; renderAll(); }, 2000);
+        });
+      }
+
+      // =====================================================================
+      // EVENT WIRING
+      // =====================================================================
+
+      // Language buttons
+      document.querySelectorAll('.lang-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          state.lang = this.dataset.lang;
+          renderAll();
+        });
+      });
+
+      // Tab buttons
+      document.querySelectorAll('.tab-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          state.activeTab = this.dataset.tab;
+          state.showCommand = false;
+          renderAll();
+        });
+      });
+
+      // Search (desktop)
+      var searchDesktop = document.getElementById('search-desktop');
+      var clearDesktop = document.getElementById('search-clear-desktop');
+      var searchShortcut = document.getElementById('search-shortcut');
+      searchDesktop.addEventListener('input', function () {
+        state.searchQuery = this.value;
+        clearDesktop.classList.toggle('hidden', !this.value);
+        if (searchShortcut) searchShortcut.style.display = this.value ? 'none' : 'block';
+        renderAll();
+      });
+      searchDesktop.addEventListener('focus', function () {
+        if (searchShortcut) searchShortcut.style.display = 'none';
+      });
+      searchDesktop.addEventListener('blur', function () {
+        if (searchShortcut && !this.value) searchShortcut.style.display = 'block';
+      });
+      clearDesktop.addEventListener('click', function () {
+        state.searchQuery = '';
+        searchDesktop.value = '';
+        this.classList.add('hidden');
+        if (searchShortcut) searchShortcut.style.display = 'block';
+        renderAll();
+      });
+
+      // Search (mobile)
+      var searchMobile = document.getElementById('search-mobile');
+      searchMobile.addEventListener('input', function () {
+        state.searchQuery = this.value;
+        searchDesktop.value = this.value;
+        clearDesktop.classList.toggle('hidden', !this.value);
+        renderAll();
+      });
+
+      // Select all (install tab)
+      document.getElementById('btn-select-all').addEventListener('click', function () {
+        var filtered = getFilteredSoftware();
+        filtered.forEach(function (s) { state.selectedIds[s.id] = true; });
+        renderAll();
+      });
+
+      // Clear selection (install tab)
+      document.getElementById('btn-clear-sel').addEventListener('click', function () {
+        state.selectedIds = {};
+        renderAll();
+      });
+
+      // Floating clear
+      var floatingClearBtn = document.getElementById('floating-clear-btn');
+      if (floatingClearBtn) {
+        floatingClearBtn.addEventListener('click', function () {
+          if (state.activeTab === 'install') {
+            state.selectedIds = {};
+          } else if (state.activeTab === 'extra') {
+            state.selectedExtraIds = {};
+          }
+          renderAll();
+        });
+      }
+
+      // Select all (extra tab)
+      document.getElementById('btn-select-all-extra').addEventListener('click', function () {
+        EXTRA_COMMANDS.forEach(function (c) { state.selectedExtraIds[c.id] = true; });
+        renderAll();
+      });
+
+      // Clear (extra tab)
+      document.getElementById('btn-clear-extra').addEventListener('click', function () {
+        state.selectedExtraIds = {};
+        renderAll();
+      });
+
+      // Show/hide command preview
+      document.getElementById('show-cmd-btn').addEventListener('click', function () {
+        state.showCommand = !state.showCommand;
+        renderAll();
+      });
+
+      // Main copy button
+      document.getElementById('copy-main-btn').addEventListener('click', function () {
+        var text = state.activeTab === 'install' ? generateInstallCommand() : generateExtraCommand();
+        if (!text) return;
+        var t = getT();
+        safeCopy(text, function () {
+          state.copiedMain = true;
+          showToast(t.toastCopied, 'success');
+          renderAll();
+          setTimeout(function () { state.copiedMain = false; renderAll(); }, 2000);
+        });
+      });
+
+      // Keyboard shortcut: Ctrl+K for search focus
+      document.addEventListener('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+          e.preventDefault();
+          var searchEl = window.innerWidth >= 768 ? searchDesktop : searchMobile;
+          searchEl.focus();
+        }
+        // Escape to close modal
+        if (e.key === 'Escape') {
+          document.getElementById('copy-modal-overlay').classList.remove('visible');
+        }
+      });
+
+      // Header scroll effect
+      var header = document.getElementById('app-header');
+      var scrollTopBtn = document.getElementById('scroll-top-btn');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+        if (window.scrollY > 400) {
+          scrollTopBtn.classList.add('visible');
+        } else {
+          scrollTopBtn.classList.remove('visible');
+        }
+      }, { passive: true });
+
+      scrollTopBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // =====================================================================
+      // INIT
+      // =====================================================================
+      renderAll();
+
+      // Animate hero stats
+      setTimeout(function () {
+        animateCounter(document.getElementById('stat-apps'), SOFTWARE_LIST.length);
+        animateCounter(document.getElementById('stat-commands'), EXTRA_COMMANDS.length);
+      }, 300);
+
+    } catch (e) {
+      console.error('EasyInstall Pro init error:', e);
+    }
+  </script>
+</body>
+
+</html>
