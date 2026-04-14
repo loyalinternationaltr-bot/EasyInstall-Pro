@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="EasyInstall Pro v9 - أتمتة إعداد ويندوز. اختر تطبيقاتك وقم بتوليد أمر واحد لتثبيتها بصمت. Windows Setup Automation Tool." />
-  <meta name="keywords" content="winget, windows, installer, silent install, setup automation, EasyInstall Pro" />
+    content="YAKAN PRO v18 - أتمتة إعداد ويندوز. اختر تطبيقاتك وقم بتوليد أمر واحد لتثبيتها بصمت. Windows Setup Automation Tool." />
+  <meta name="keywords" content="winget, windows, installer, silent install, setup automation, YAKAN PRO" />
   <meta name="author" content="Omar Yakan" />
   <meta name="theme-color" content="#0f172a" />
-  <title>EasyInstall Pro v9 - مثبت ويندوز الصامت</title>
+  <title>YAKAN PRO v18 - مثبت ويندوز الصامت</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -84,10 +84,19 @@
 
     body[dir="rtl"] {
       font-family: 'Tajawal', 'Inter', system-ui, sans-serif;
+      user-select: none;
+      cursor: default;
     }
 
     body[dir="ltr"] {
       font-family: 'Inter', 'Tajawal', system-ui, sans-serif;
+      user-select: none;
+      cursor: default;
+    }
+
+    input, textarea {
+      user-select: text !important;
+      cursor: text !important;
     }
 
     /* ===== SCROLLBAR ===== */
@@ -114,7 +123,7 @@
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.4;
+      opacity: 0.9;
     }
 
     .bg-mesh {
@@ -123,9 +132,16 @@
       z-index: 0;
       pointer-events: none;
       background:
-        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(6, 182, 212, 0.04) 0%, transparent 60%);
+        radial-gradient(ellipse 90% 70% at 15% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 80% 90% at 85% 85%, rgba(139, 92, 246, 0.10) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 60% 30%, rgba(217, 70, 239, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 60% at 10% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 40% at 90% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
+      animation: nebulaPulse 10s ease-in-out infinite alternate;
+    }
+    @keyframes nebulaPulse {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.02); }
     }
 
     /* ===== LAYOUT ===== */
@@ -291,6 +307,21 @@
       animation-delay: 0.3s;
     }
 
+    @keyframes lightningNeon {
+      0%, 20%, 40%, 60%, 80%, 100% { 
+        text-shadow: 0 0 10px #f43f5e, 0 0 25px #f43f5e, 0 0 50px #f43f5e; 
+        color: #fff;
+      }
+      10%, 30%, 50%, 70%, 90% { 
+        text-shadow: 0 0 10px #3b82f6, 0 0 25px #3b82f6, 0 0 50px #22d3ee; 
+        color: #fff;
+      }
+      2%, 22%, 42%, 62%, 82% {
+        text-shadow: none;
+        color: #666; /* flickering */
+      }
+    }
+
     /* ===== GRADIENT TEXT ===== */
     .gradient-text {
       background: linear-gradient(135deg, var(--blue-400), var(--violet-400), var(--cyan-400));
@@ -308,52 +339,74 @@
       background-clip: text;
     }
 
-    /* ===== HEADER ===== */
+    /* ===== SUPER NAVBAR v17 ===== */
     #app-header {
       position: sticky;
       top: 0;
       z-index: 40;
       width: 100%;
-      border-bottom: 1px solid var(--glass-border);
-      background: rgba(2, 6, 23, 0.75);
-      backdrop-filter: blur(20px) saturate(1.5);
-      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      background: transparent !important;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       transition: var(--transition-smooth);
     }
 
     #app-header.scrolled {
-      background: rgba(2, 6, 23, 0.92);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      background: rgba(2, 6, 23, 0.4);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
     }
 
-    .header-inner {
-      max-width: 1360px;
+    /* Row 1: Logo + Stats + Search + Lang */
+    .header-row1 {
+      max-width: 1600px;
       margin-inline: auto;
       padding-inline: 1.25rem;
-      height: 4.5rem;
+      height: 3.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.07);
+    }
+
+    /* Row 2: Tabs + Categories + Drive */
+    .header-row2 {
+      max-width: 1600px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+      height: 2.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .header-row2::-webkit-scrollbar {
+      display: none;
     }
 
     .logo-group {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.6rem;
+      flex-shrink: 0;
     }
 
     .logo-box {
-      width: 2.75rem;
-      height: 2.75rem;
-      border-radius: 0.875rem;
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 0.6rem;
       background: var(--gradient-primary);
       background-size: 200% 200%;
       animation: gradientShift 3s ease infinite;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
       transition: var(--transition-smooth);
+      flex-shrink: 0;
     }
 
     .logo-box:hover {
@@ -361,17 +414,13 @@
     }
 
     .logo-text h1 {
-      font-size: 1.35rem;
+      font-size: 1rem;
       font-weight: 800;
       color: white;
-      line-height: 1.2;
+      line-height: 1;
       letter-spacing: -0.02em;
-    }
-
-    .logo-text p {
-      font-size: 0.7rem;
-      color: var(--slate-400);
-      font-weight: 500;
+      white-space: nowrap;
+      animation: lightningNeon 4s infinite;
     }
 
     .version-badge {
@@ -379,19 +428,58 @@
       align-items: center;
       background: rgba(139, 92, 246, 0.15);
       color: var(--violet-400);
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       font-weight: 700;
-      padding: 0.15rem 0.5rem;
+      padding: 0.1rem 0.4rem;
       border-radius: 9999px;
       border: 1px solid rgba(139, 92, 246, 0.2);
-      margin-inline-start: 0.5rem;
+      margin-inline-start: 0.4rem;
       letter-spacing: 0.05em;
+    }
+
+    /* Inline stats pills */
+    .header-stats {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 900px) {
+      .header-stats {
+        display: flex;
+      }
+    }
+
+    .hstat-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 9999px;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--slate-300);
+      white-space: nowrap;
+    }
+
+    .hstat-pill strong {
+      font-size: 0.85rem;
+      font-weight: 800;
+      background: var(--gradient-primary);
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
     /* Search */
@@ -400,7 +488,7 @@
       display: none;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 640px) {
       .search-wrap {
         display: block;
       }
@@ -409,21 +497,20 @@
     .search-wrap input {
       background: rgba(15, 23, 42, 0.8);
       border: 1px solid var(--glass-border);
-      border-radius: 0.875rem;
-      padding: 0.625rem 1rem;
-      font-size: 0.875rem;
+      border-radius: 0.75rem;
+      padding: 0.45rem 0.875rem;
+      font-size: 0.8rem;
       color: var(--slate-100);
-      width: 18rem;
+      width: 14rem;
       outline: none;
       transition: var(--transition-smooth);
       font-family: inherit;
-      backdrop-filter: blur(8px);
     }
 
     .search-wrap input:focus {
       border-color: var(--blue-500);
-      width: 22rem;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12), 0 0 20px rgba(59, 130, 246, 0.1);
+      width: 18rem;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
     .search-icon-pos {
@@ -435,19 +522,19 @@
     }
 
     [dir="rtl"] .search-icon-pos {
-      right: 0.875rem;
+      right: 0.7rem;
     }
 
     [dir="ltr"] .search-icon-pos {
-      left: 0.875rem;
+      left: 0.7rem;
     }
 
     [dir="rtl"] .search-wrap input {
-      padding-right: 2.75rem;
+      padding-right: 2.25rem;
     }
 
     [dir="ltr"] .search-wrap input {
-      padding-left: 2.75rem;
+      padding-left: 2.25rem;
     }
 
     .search-clear-btn {
@@ -458,18 +545,18 @@
       border: none;
       cursor: pointer;
       color: var(--slate-500);
-      padding: 0.25rem;
+      padding: 0.2rem;
       display: flex;
       align-items: center;
       transition: var(--transition-smooth);
     }
 
     [dir="rtl"] .search-clear-btn {
-      left: 0.75rem;
+      left: 0.6rem;
     }
 
     [dir="ltr"] .search-clear-btn {
-      right: 0.75rem;
+      right: 0.6rem;
     }
 
     .search-clear-btn:hover {
@@ -481,40 +568,38 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: var(--slate-600);
-      background: var(--slate-800);
-      padding: 0.15rem 0.4rem;
-      border-radius: 0.25rem;
-      border: 1px solid var(--slate-700);
+      font-size: 0.75rem; /* slightly larger for readability */
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.8); /* clearer in dark mode */
+      background: rgba(255, 255, 255, 0.1); 
+      padding: 0.1rem 0.4rem;
+      border-radius: 0.3rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       pointer-events: none;
     }
 
     [dir="rtl"] .search-shortcut {
-      left: 0.75rem;
+      left: 0.6rem;
     }
 
     [dir="ltr"] .search-shortcut {
-      right: 0.75rem;
+      right: 0.6rem;
     }
 
-    /* Language switcher */
     .lang-switcher {
       display: flex;
       align-items: center;
       background: rgba(15, 23, 42, 0.8);
-      border-radius: 0.875rem;
-      padding: 0.25rem;
+      border-radius: 0.6rem;
+      padding: 0.2rem;
       border: 1px solid var(--glass-border);
-      gap: 0.2rem;
-      backdrop-filter: blur(8px);
+      gap: 0.15rem;
     }
 
     .lang-btn {
-      padding: 0.35rem 0.85rem;
-      border-radius: 0.7rem;
-      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 0.45rem;
+      font-size: 0.7rem;
       font-weight: 700;
       border: none;
       cursor: pointer;
@@ -522,8 +607,6 @@
       color: var(--slate-500);
       background: transparent;
       font-family: inherit;
-      position: relative;
-      overflow: hidden;
     }
 
     .lang-btn.active {
@@ -531,7 +614,7 @@
       background-size: 200% 200%;
       animation: gradientShift 3s ease infinite;
       color: white;
-      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35);
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
     }
 
     .lang-btn:not(.active):hover {
@@ -539,142 +622,14 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
-    /* ===== MAIN ===== */
-    main {
-      flex: 1;
-      max-width: 1360px;
-      margin-inline: auto;
-      padding-inline: 1.25rem;
-      padding-block: 2.5rem;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ===== HERO ===== */
-    .hero {
-      margin-bottom: 3.5rem;
-      text-align: center;
-      padding-block: 2rem;
-      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-    }
-
-    .hero h2 {
-      font-size: clamp(2rem, 5vw, 3.25rem);
-      font-weight: 900;
-      color: white;
-      margin-bottom: 1.25rem;
-      line-height: 1.15;
-      letter-spacing: -0.03em;
-    }
-
-    .hero p {
-      font-size: 1.05rem;
-      color: var(--slate-400);
-      margin-bottom: 2.5rem;
-      max-width: 42rem;
-      margin-inline: auto;
-      line-height: 1.7;
-    }
-
-    .hero-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--glass-bg);
-      color: var(--slate-300);
-      padding: 0.625rem 1.25rem;
-      border-radius: 9999px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(8px);
-      transition: var(--transition-smooth);
-    }
-
-    .hero-badge:hover {
-      border-color: rgba(59, 130, 246, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .hero-badge-icon {
-      width: 1.5rem;
-      height: 1.5rem;
-      border-radius: 9999px;
+    /* Row2 tab buttons */
+    .nav-tab-btn {
       display: flex;
       align-items: center;
-      justify-content: center;
-    }
-
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .hero-stat {
-      text-align: center;
-      padding: 1rem 1.5rem;
-      background: var(--glass-bg);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(8px);
-      transition: var(--transition-smooth);
-      min-width: 120px;
-    }
-
-    .hero-stat:hover {
-      border-color: rgba(59, 130, 246, 0.3);
-      transform: translateY(-3px);
-    }
-
-    .hero-stat .number {
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: white;
-      font-family: 'Inter', 'JetBrains Mono', monospace;
-    }
-
-    .hero-stat .label {
-      font-size: 0.75rem;
-      color: var(--slate-400);
-      margin-top: 0.25rem;
-    }
-
-    /* ===== TABS ===== */
-    .tabs-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 3rem;
-      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
-    }
-
-    .tabs-inner {
-      background: var(--glass-bg);
-      padding: 0.35rem;
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--glass-border);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.25rem;
-      backdrop-filter: blur(12px);
-    }
-
-    .tab-btn {
-      padding: 0.7rem 1.5rem;
-      border-radius: 0.8rem;
-      font-size: 0.875rem;
+      gap: 0.35rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 0.55rem;
+      font-size: 0.78rem;
       font-weight: 700;
       border: none;
       cursor: pointer;
@@ -682,82 +637,128 @@
       color: var(--slate-400);
       background: transparent;
       font-family: inherit;
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .tab-btn .tab-icon {
-      display: flex;
-      align-items: center;
-    }
-
-    .tab-btn.active {
+    .nav-tab-btn.active {
       background: var(--gradient-primary);
       background-size: 200% 200%;
       animation: gradientShift 3s ease infinite;
       color: white;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 3px 12px rgba(59, 130, 246, 0.3);
     }
 
-    .tab-btn:not(.active):hover {
+    .nav-tab-btn:not(.active):hover {
       color: white;
       background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* row2 divider */
+    .nav-divider {
+      width: 1px;
+      height: 1.25rem;
+      background: var(--glass-border);
+      flex-shrink: 0;
+    }
+
+    /* row2 category chips */
+    .nav-cat-btn {
+      padding: 0.28rem 0.7rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      color: var(--slate-400);
+      background: transparent;
+      font-family: inherit;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-cat-btn.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--blue-400);
+      border-color: rgba(59, 130, 246, 0.25);
+    }
+
+    .nav-cat-btn:not(.active):hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    #cat-nav-row {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex-shrink: 0;
     }
 
     .drive-btn {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
       background: rgba(5, 150, 105, 0.1);
       color: var(--emerald-400);
-      padding: 0.7rem 1.5rem;
-      border-radius: var(--radius-xl);
-      font-size: 0.875rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 0.55rem;
+      font-size: 0.75rem;
       font-weight: 700;
       border: 1px solid rgba(16, 185, 129, 0.2);
       text-decoration: none;
       transition: var(--transition-smooth);
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-inline-start: auto;
     }
 
     .drive-btn:hover {
       background: rgba(5, 150, 105, 0.2);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
     }
 
-    /* ===== LAYOUT ===== */
-    .layout-with-sidebar {
+    /* ===== MAIN ===== */
+    main {
+      flex: 1;
+      max-width: 1600px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+      padding-block: 1.25rem;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== HERO — hidden in v15 ===== */
+    .hero {
+      display: none !important;
+    }
+
+    .tabs-wrap {
+      display: none !important;
+    }
+
+    /* ===== SECTION TITLE COMPACT ===== */
+    .sw-grid-header {
       display: flex;
-      flex-direction: column;
-      gap: 2rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
     }
 
-    @media (min-width: 768px) {
-      .layout-with-sidebar {
-        flex-direction: row;
-      }
-
-      [dir="rtl"] .layout-with-sidebar {
-        flex-direction: row;
-      }
+    /* ===== LAYOUT v15 — no sidebar ===== */
+    .layout-with-sidebar {
+      display: block;
     }
 
     .sidebar {
-      width: 100%;
-    }
-
-    @media (min-width: 768px) {
-      .sidebar {
-        width: 16rem;
-        flex-shrink: 0;
-      }
+      display: none !important;
     }
 
     .sidebar-sticky {
-      position: sticky;
-      top: 6rem;
+      display: none !important;
     }
 
     .cat-label {
@@ -838,38 +839,31 @@
       line-height: 1.7;
     }
 
-    /* ===== SOFTWARE GRID ===== */
-    .sw-grid-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.75rem;
-    }
-
+    /* ===== SOFTWARE GRID v11 — 6 columns ===== */
     .sw-grid-header h3 {
-      font-size: 1.35rem;
-      font-weight: 800;
+      font-size: 1rem;
+      font-weight: 700;
       color: white;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
     }
 
     .sw-grid-header .count {
       color: var(--slate-500);
       font-weight: 500;
-      font-size: 0.85rem;
-      margin-inline-start: 0.5rem;
+      font-size: 0.78rem;
+      margin-inline-start: 0.4rem;
     }
 
     .btn-action {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
       background: none;
       border: none;
       cursor: pointer;
       font-family: inherit;
       transition: var(--transition-smooth);
-      padding: 0.4rem 0.8rem;
-      border-radius: 0.5rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 0.4rem;
     }
 
     .btn-action.select-all {
@@ -890,32 +884,39 @@
 
     .sw-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.875rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
     }
 
-    @media (min-width: 480px) {
-      .sw-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (min-width: 1024px) {
+    @media (min-width: 640px) {
       .sw-grid {
         grid-template-columns: repeat(3, 1fr);
       }
     }
 
-    @media (min-width: 1400px) {
+    @media (min-width: 900px) {
       .sw-grid {
         grid-template-columns: repeat(4, 1fr);
       }
     }
 
+    @media (min-width: 1200px) {
+      .sw-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    @media (min-width: 1400px) {
+      .sw-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    /* ===== SW CARD v11 — compact ===== */
     .sw-card {
       position: relative;
-      padding: 1.125rem;
-      border-radius: var(--radius-xl);
+      padding: 0.75rem;
+      border-radius: 0.85rem;
       border: 1px solid var(--glass-border);
       background: var(--glass-bg);
       cursor: pointer;
@@ -936,43 +937,39 @@
 
     .sw-card:hover {
       border-color: rgba(148, 163, 184, 0.2);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-card);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
 
     .sw-card.selected {
       background: rgba(59, 130, 246, 0.08);
       border-color: rgba(59, 130, 246, 0.4);
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.15), 0 8px 25px rgba(59, 130, 246, 0.1);
-    }
-
-    .sw-card.selected::before {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.15), 0 4px 16px rgba(59, 130, 246, 0.1);
     }
 
     .sw-card-top {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
     }
 
     .sw-icon-wrap {
-      width: 3.25rem;
-      height: 3.25rem;
-      border-radius: 0.875rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.6rem;
       background: var(--slate-800);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0.5rem;
+      padding: 0.35rem;
       overflow: hidden;
       transition: var(--transition-smooth);
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .sw-card:hover .sw-icon-wrap {
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
 
     .sw-card.selected .sw-icon-wrap {
@@ -987,8 +984,8 @@
     }
 
     .sw-check {
-      width: 1.375rem;
-      height: 1.375rem;
+      width: 1.15rem;
+      height: 1.15rem;
       border-radius: 9999px;
       border: 2px solid var(--slate-700);
       display: flex;
@@ -1001,7 +998,7 @@
     .sw-card.selected .sw-check {
       background: var(--gradient-primary);
       border-color: transparent;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
     }
 
     .sw-card.selected .sw-check svg {
@@ -1011,29 +1008,29 @@
     .sw-card h4 {
       font-weight: 700;
       color: white;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.15rem;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-size: 0.9rem;
+      font-size: 0.78rem;
       letter-spacing: -0.01em;
     }
 
     .sw-winget {
-      font-size: 0.65rem;
+      font-size: 0.58rem;
       color: var(--slate-500);
       font-family: 'JetBrains Mono', 'Courier New', monospace;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.45rem;
     }
 
     .sw-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.375rem;
-      font-size: 0.7rem;
+      gap: 0.3rem;
+      font-size: 0.65rem;
       font-weight: 700;
       color: var(--blue-400);
       text-decoration: none;
@@ -1078,14 +1075,8 @@
     /* ===== EXTRA COMMANDS ===== */
     .extra-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.875rem;
-    }
-
-    @media (min-width: 768px) {
-      .extra-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
     }
 
     .cmd-card {
@@ -1215,14 +1206,10 @@
     /* ===== LINKS ===== */
     .links-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.875rem;
-    }
-
-    @media (min-width: 768px) {
-      .links-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+      align-items: center;
+      justify-content: center;
     }
 
     .link-card {
@@ -1311,14 +1298,8 @@
     /* ===== DRIVERS ===== */
     .drivers-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.875rem;
-    }
-
-    @media (min-width: 768px) {
-      .drivers-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
     }
 
     .driver-card {
@@ -1471,7 +1452,8 @@
       color: white;
     }
 
-    .show-cmd-btn, .floating-clear-btn {
+    .show-cmd-btn,
+    .floating-clear-btn {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--glass-border);
       padding: 0.4rem 0.85rem;
@@ -1815,9 +1797,9 @@
     /* ===== FOOTER ===== */
     footer {
       padding-block: 3.5rem;
-      border-top: 1px solid var(--glass-border);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
       margin-top: 5rem;
-      background: rgba(2, 6, 23, 0.8);
+      background: transparent !important;
       position: relative;
       z-index: 1;
     }
@@ -1902,13 +1884,590 @@
       vertical-align: middle;
     }
 
-    /* ===== LOADING SKELETON ===== */
-    .skeleton {
-      background: linear-gradient(90deg, var(--slate-800) 25%, var(--slate-700) 50%, var(--slate-800) 75%);
-      background-size: 400% 100%;
-      animation: shimmer 1.5s ease infinite;
-      border-radius: 0.5rem;
     }
+
+    /* =========================================
+       v12 ENHANCEMENTS
+       ========================================= */
+
+    /* Main nav tabs: slightly larger font */
+    .nav-tab-btn {
+      font-size: 0.86rem;
+    }
+
+    /* ===== CATEGORY STRIP ===== */
+    #cat-strip {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.38s ease;
+      border-top: 1px solid transparent;
+    }
+
+    #cat-strip.visible {
+      max-height: 3.5rem;
+      border-top-color: var(--glass-border);
+    }
+
+    .cat-strip-inner {
+      max-width: 1600px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+      height: 2.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .cat-strip-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Category chips */
+    .cat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.28rem 0.78rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease,
+        color 0.2s ease, transform 0.18s ease,
+        box-shadow 0.2s ease;
+      color: var(--slate-400);
+      background: transparent;
+      font-family: inherit;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .cat-chip:hover {
+      background: rgba(255, 255, 255, 0.07) !important;
+      color: white !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      transform: translateY(-1px);
+    }
+
+    .cat-chip.active {
+      font-weight: 700;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 10px -2px currentColor;
+    }
+
+    .cat-chip svg {
+      flex-shrink: 0;
+    }
+
+    /* ===== THEME TOGGLE ===== */
+    .theme-toggle {
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 0.55rem;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--slate-400);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      color: #fbbf24;
+      border-color: rgba(251, 191, 36, 0.4);
+      background: rgba(251, 191, 36, 0.1);
+      transform: rotate(22deg) scale(1.08);
+    }
+
+    /* ===== CURSOR GLOW ===== */
+    #cursor-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(circle at center,
+          rgba(59, 130, 246, 0.08) 0%,
+          rgba(139, 92, 246, 0.05) 40%,
+          transparent 70%);
+      will-change: transform;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* ===== PERFORMANCE ===== */
+    .sw-grid {
+      contain: layout style;
+    }
+
+    .sw-card {
+      contain: layout style paint;
+    }
+
+    .cmd-card {
+      contain: layout style;
+    }
+
+    .sw-card:hover {
+      will-change: transform;
+    }
+
+    /* ===== LIGHT THEME ===== */
+    [data-theme="light"] {
+      color-scheme: light;
+    }
+
+    [data-theme="light"] body {
+      background-color: #edf2ff;
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .bg-mesh {
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99, 102, 241, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(139, 92, 246, 0.04) 0%, transparent 60%);
+    }
+
+    [data-theme="light"] #app-header {
+      background: rgba(237, 242, 255, 0.93) !important;
+      border-bottom-color: rgba(99, 102, 241, 0.12);
+    }
+
+    [data-theme="light"] #app-header.scrolled {
+      background: rgba(237, 242, 255, 0.98) !important;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .header-row1 {
+      border-bottom-color: rgba(99, 102, 241, 0.08);
+    }
+
+    [data-theme="light"] #cat-strip.visible {
+      border-top-color: rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .cat-chip {
+      color: #475569;
+    }
+
+    [data-theme="light"] .cat-chip:hover {
+      background: rgba(99, 102, 241, 0.08) !important;
+      color: #1e293b !important;
+      border-color: rgba(99, 102, 241, 0.15) !important;
+    }
+
+    [data-theme="light"] .logo-text h1 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .hstat-pill {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: rgba(99, 102, 241, 0.15);
+      color: #475569;
+    }
+
+    [data-theme="light"] .hstat-pill strong {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed, #0ea5e9);
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    [data-theme="light"] .search-wrap input {
+      background: rgba(255, 255, 255, 0.92);
+      border-color: rgba(99, 102, 241, 0.2);
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .search-wrap input::placeholder {
+      color: #94a3b8;
+    }
+
+    [data-theme="light"] .search-shortcut {
+      background: transparent !important;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #4f46e5;
+    }
+
+    [data-theme="light"] .search-wrap input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    [data-theme="light"] .search-icon-pos {
+      color: #94a3b8;
+    }
+
+    [data-theme="light"] .lang-switcher {
+      background: rgba(255, 255, 255, 0.88);
+      border-color: rgba(99, 102, 241, 0.15);
+    }
+
+    [data-theme="light"] .lang-btn {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .lang-btn:not(.active):hover {
+      color: #1e293b;
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    [data-theme="light"] .theme-toggle {
+      background: rgba(255, 255, 255, 0.88);
+      border-color: rgba(99, 102, 241, 0.15);
+      color: #64748b;
+    }
+
+    [data-theme="light"] .theme-toggle:hover {
+      color: #4f46e5;
+      border-color: rgba(99, 102, 241, 0.3);
+      background: rgba(99, 102, 241, 0.08);
+      transform: rotate(-22deg) scale(1.08);
+    }
+
+    [data-theme="light"] .nav-tab-btn {
+      color: #1e293b; /* Darker text */
+      font-weight: 800;
+    }
+
+    [data-theme="light"] .nav-tab-btn:not(.active):hover {
+      background: rgba(99, 102, 241, 0.12);
+      color: #000;
+    }
+
+    [data-theme="light"] .sw-card h4, 
+    [data-theme="light"] .cmd-card h4, 
+    [data-theme="light"] .link-card h4, 
+    [data-theme="light"] .driver-card h4 {
+      color: #0f172a !important; /* Max contrast for titles */
+    }
+
+    [data-theme="light"] .sw-winget, 
+    [data-theme="light"] .link-card p, 
+    [data-theme="light"] .driver-card p, 
+    [data-theme="light"] .section-header p {
+      color: #334155 !important; /* Darker secondary text */
+    }
+
+    [data-theme="light"] .drive-btn {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    [data-theme="light"] .sw-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .sw-card:hover {
+      border-color: rgba(99, 102, 241, 0.22);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.08);
+    }
+
+    [data-theme="light"] .sw-card h4 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .sw-winget {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .sw-icon-wrap {
+      background: #f1f5f9;
+      border-color: rgba(99, 102, 241, 0.08);
+    }
+
+    [data-theme="light"] .sw-check {
+      border-color: #cbd5e1;
+    }
+
+    [data-theme="light"] .sw-grid-header h3 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .sw-grid-header .count {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .btn-action.select-all {
+      color: #4f46e5;
+    }
+
+    [data-theme="light"] .btn-action.select-all:hover {
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .btn-action.clear-sel {
+      color: #e11d48;
+    }
+
+    [data-theme="light"] .cmd-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .cmd-card h4 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .cmd-icon-wrap {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: rgba(99, 102, 241, 0.12);
+      color: #4f46e5;
+    }
+
+    [data-theme="light"] .link-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .link-card h4 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .link-card p {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .driver-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .driver-card h4 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .driver-card p {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .section-header h3,
+    [data-theme="light"] .section-title-center h3 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .section-header p,
+    [data-theme="light"] .section-title-center p {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .action-bar-inner {
+      background: rgba(255, 255, 255, 0.97);
+      border-color: rgba(99, 102, 241, 0.15);
+    }
+
+    [data-theme="light"] .badge-label {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .show-cmd-btn {
+      color: #4f46e5;
+      background: rgba(99, 102, 241, 0.08);
+      border-color: rgba(99, 102, 241, 0.15);
+    }
+
+    [data-theme="light"] .floating-clear-btn {
+      color: #e11d48;
+      background: rgba(225, 29, 72, 0.06);
+      border-color: rgba(225, 29, 72, 0.12);
+    }
+
+    [data-theme="light"] footer {
+      background: rgba(237, 242, 255, 0.92);
+      border-top-color: rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .footer-author {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .footer-contact p {
+      color: #475569;
+    }
+
+    [data-theme="light"] .footer-links a {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .footer-links a:hover {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] #copy-modal {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    [data-theme="light"] #copy-modal h3 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] #copy-modal p {
+      color: #64748b;
+    }
+
+    [data-theme="light"] #copy-modal-text {
+      background: rgba(241, 245, 249, 0.9);
+      border-color: #e2e8f0;
+      color: #059669;
+    }
+
+    [data-theme="light"] .modal-close-btn {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .modal-close-btn:hover {
+      background: #cbd5e1;
+    }
+
+    [data-theme="light"] .empty-state h4 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .empty-state p {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .empty-icon-wrap {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="light"] .toast {
+      background: rgba(255, 255, 255, 0.97);
+      border-color: rgba(99, 102, 241, 0.15);
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .tip-box {
+      background: rgba(255, 255, 255, 0.75);
+      border-color: rgba(99, 102, 241, 0.12);
+    }
+
+    [data-theme="light"] .tip-box h4 {
+      color: #1e293b;
+    }
+
+    [data-theme="light"] .tip-box p {
+      color: #64748b;
+    }
+
+    [data-theme="light"] .cmd-preview {
+      background: rgba(241, 245, 249, 0.9);
+      border-color: rgba(99, 102, 241, 0.12);
+    }
+
+    [data-theme="light"] .cmd-preview code {
+      color: #059669;
+    }
+
+    [data-theme="light"] #cursor-glow {
+      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.07) 0%, rgba(139, 92, 246, 0.04) 40%, transparent 70%);
+    }
+
+    /* =========================================
+       v13 ENHANCEMENTS
+       ========================================= */
+
+    /* --- GALAXY: body base --- */
+    body { background: #010410; }
+
+    /* --- CATEGORY CHIPS: Always glowing v17 --- */
+    .cat-chip {
+      box-shadow: 0 0 15px -1px var(--chip-color, rgba(99,102,241,0.6)) !important; /* Visible permanent glow */
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .cat-chip:hover {
+      background: rgba(255, 255, 255, 0.15) !important;
+      backdrop-filter: blur(15px) !important;
+      -webkit-backdrop-filter: blur(15px) !important;
+      border-color: #fff !important;
+      box-shadow: 0 0 45px 5px var(--chip-color, rgba(99,102,241,0.9)),
+                  inset 0 0 25px rgba(255,255,255,0.1) !important;
+      color: white !important;
+      transform: translateY(-3px) scale(1.05);
+    }
+    .cat-chip.active {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: #fff !important;
+      box-shadow: 0 0 30px 2px var(--chip-color, rgba(99,102,241,0.8)),
+                  0 0 60px -5px var(--chip-color, rgba(99,102,241,0.8)) !important;
+    }
+
+    /* --- SW CARD: Glow border on hover --- */
+    .sw-card:hover {
+      border-color: rgba(99, 102, 241, 0.35) !important;
+      transform: translateY(-3px) !important;
+      box-shadow:
+        0 0 0 1px rgba(99, 102, 241, 0.2),
+        0 4px 24px rgba(99, 102, 241, 0.18),
+        0 16px 40px rgba(0, 0, 0, 0.35) !important;
+    }
+    .sw-card.selected {
+      box-shadow:
+        0 0 0 1px rgba(59, 130, 246, 0.5),
+        0 4px 20px rgba(59, 130, 246, 0.2) !important;
+    }
+
+    /* --- CMD / LINK / DRIVER CARDS: Glow on hover --- */
+    .cmd-card:hover {
+      border-color: rgba(52, 211, 153, 0.35) !important;
+      box-shadow:
+        0 0 0 1px rgba(52, 211, 153, 0.2),
+        0 4px 24px rgba(52, 211, 153, 0.15),
+        0 16px 40px rgba(0, 0, 0, 0.3) !important;
+      transform: translateY(-3px) !important;
+    }
+    .link-card:hover {
+      border-color: rgba(129, 140, 248, 0.35) !important;
+      box-shadow:
+        0 0 0 1px rgba(129, 140, 248, 0.2),
+        0 4px 24px rgba(129, 140, 248, 0.15),
+        0 16px 40px rgba(0, 0, 0, 0.3) !important;
+      transform: translateY(-3px) !important;
+    }
+    .driver-card:hover {
+      border-color: rgba(251, 113, 133, 0.35) !important;
+      box-shadow:
+        0 0 0 1px rgba(251, 113, 133, 0.2),
+        0 4px 24px rgba(251, 113, 133, 0.15),
+        0 16px 40px rgba(0, 0, 0, 0.3) !important;
+      transform: translateY(-3px) !important;
+    }
+
+    /* --- NAV TAB BUTTONS: Glow always --- */
+    .nav-tab-btn {
+      font-size: 0.95rem; /* Larger font */
+      box-shadow: 0 0 10px -3px rgba(99, 102, 241, 0.35); /* Subtle permanent glow */
+    }
+    .nav-tab-btn:not(.active):hover {
+      box-shadow: 0 0 18px -4px rgba(99, 102, 241, 0.5) !important;
+      border-color: rgba(99, 102, 241, 0.3) !important;
+      transform: translateY(-1px);
+    }
+    .nav-tab-btn.active {
+      box-shadow: 0 4px 18px rgba(59, 130, 246, 0.4),
+                  0 0 30px -4px rgba(99, 102, 241, 0.7) !important; /* Strong active glow */
+    }
+
+    /* --- SEARCH SHORTCUT: update to show "/" hint --- */
+    .search-shortcut { font-size: 0.75rem; }
+
   </style>
 </head>
 
@@ -1945,34 +2504,56 @@
     </div>
   </div>
 
-  <!-- HEADER -->
+  <!-- HEADER v12: Super Navbar -->
   <header id="app-header">
-    <div class="header-inner">
+    <!-- Row 1: Logo + Stats + Search + Lang -->
+    <div class="header-row1">
       <div class="logo-group">
         <div class="logo-box">
-          <svg class="icon" width="22" height="22" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24">
+          <svg class="icon" width="16" height="16" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="7 10 12 15 17 10" />
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
         </div>
         <div class="logo-text">
-          <h1 id="hdr-title">EasyInstall Pro <span class="version-badge">v9</span></h1>
-          <p id="hdr-subtitle"></p>
+          <h1 id="hdr-title">YAKAN PRO <span class="version-badge">v18</span></h1>
+        </div>
+      </div>
+
+      <!-- Inline stats -->
+      <div class="header-stats" id="header-stats-row">
+        <div class="hstat-pill">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span id="hstat-desc"></span>
+        </div>
+        <div class="hstat-pill">
+          <strong id="stat-apps">0</strong>
+          <span id="stat-apps-label"></span>
+        </div>
+        <div class="hstat-pill">
+          <strong id="stat-commands">0</strong>
+          <span id="stat-commands-label"></span>
+        </div>
+        <div class="hstat-pill">
+          <strong id="stat-langs">3</strong>
+          <span id="stat-langs-label"></span>
         </div>
       </div>
 
       <div class="header-actions">
         <div class="search-wrap">
-          <svg class="icon search-icon-pos" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+          <svg class="icon search-icon-pos" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
             viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
           <input type="text" id="search-desktop" autocomplete="off" />
-          <span class="search-shortcut" id="search-shortcut">Ctrl+K</span>
+          <span class="search-shortcut" id="search-shortcut">/</span>
           <button class="search-clear-btn hidden" id="search-clear-desktop" aria-label="Clear search">
-            <svg class="icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+            <svg class="icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
               viewBox="0 0 24 24">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
@@ -1984,7 +2565,78 @@
           <button class="lang-btn" data-lang="en" id="lang-en">EN</button>
           <button class="lang-btn" data-lang="tr" id="lang-tr">TR</button>
         </div>
+        <!-- Theme toggle -->
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg id="icon-sun" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+          <svg id="icon-moon" class="hidden" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
       </div>
+    </div>
+
+    <!-- Row 2: Tabs + Divider + Categories + Drive -->
+    <div class="header-row2" id="header-row2">
+      <!-- Tab buttons -->
+      <button class="nav-tab-btn active" data-tab="install" id="tab-install">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span></span>
+      </button>
+      <button class="nav-tab-btn" data-tab="extra" id="tab-extra">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <polyline points="4 17 10 11 4 5" />
+          <line x1="12" y1="19" x2="20" y2="19" />
+        </svg>
+        <span></span>
+      </button>
+      <button class="nav-tab-btn" data-tab="links" id="tab-links">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+          <polyline points="15 3 21 3 21 9" />
+          <line x1="10" y1="14" x2="21" y2="3" />
+        </svg>
+        <span></span>
+      </button>
+      <button class="nav-tab-btn" data-tab="drivers" id="tab-drivers">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+        <span></span>
+      </button>
+
+      <!-- Drive button pushed to end -->
+      <a href="https://drive.google.com/drive/folders/1BupUo6yEpnqd5m2-P6kjBJF2SJWuwWdQ?usp=sharing" target="_blank"
+        rel="noopener noreferrer" class="drive-btn" id="drive-btn">
+        <svg class="icon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+          <polyline points="15 3 21 3 21 9" />
+          <line x1="10" y1="14" x2="21" y2="3" />
+        </svg>
+        <span id="drive-link-text"></span>
+      </a>
+    </div>
+
+    <!-- Category Strip: animated row under tabs, visible on Install tab -->
+    <div id="cat-strip">
+      <div class="cat-strip-inner" id="cat-strip-inner"></div>
     </div>
   </header>
 
@@ -2029,55 +2681,7 @@
       </div>
     </section>
 
-    <!-- Tabs -->
-    <div class="tabs-wrap">
-      <div class="tabs-inner">
-        <button class="tab-btn active" data-tab="install" id="tab-install">
-          <span class="tab-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg></span>
-          <span></span>
-        </button>
-        <button class="tab-btn" data-tab="extra" id="tab-extra">
-          <span class="tab-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
-              <polyline points="4 17 10 11 4 5" />
-              <line x1="12" y1="19" x2="20" y2="19" />
-            </svg></span>
-          <span></span>
-        </button>
-        <button class="tab-btn" data-tab="links" id="tab-links">
-          <span class="tab-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg></span>
-          <span></span>
-        </button>
-        <button class="tab-btn" data-tab="drivers" id="tab-drivers">
-          <span class="tab-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
-              <rect x="2" y="3" width="20" height="14" rx="2" />
-              <line x1="8" y1="21" x2="16" y2="21" />
-              <line x1="12" y1="17" x2="12" y2="21" />
-            </svg></span>
-          <span></span>
-        </button>
-      </div>
-      <a href="https://drive.google.com/drive/folders/1BupUo6yEpnqd5m2-P6kjBJF2SJWuwWdQ?usp=sharing" target="_blank"
-        rel="noopener noreferrer" class="drive-btn" id="drive-btn">
-        <svg class="icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-          <polyline points="15 3 21 3 21 9" />
-          <line x1="10" y1="14" x2="21" y2="3" />
-        </svg>
-        <span id="drive-link-text"></span>
-      </a>
-    </div>
+    <!-- Tabs row removed — now in navbar -->
 
     <!-- TAB: Install -->
     <div class="tab-panel active" id="panel-install">
@@ -2140,7 +2744,7 @@
 
     <!-- TAB: Extra -->
     <div class="tab-panel" id="panel-extra">
-      <div style="max-width:56rem;margin-inline:auto;">
+      <div style="width:100%; margin:0 auto;">
         <div class="section-header">
           <div>
             <h3 id="extra-title"></h3>
@@ -2157,7 +2761,7 @@
 
     <!-- TAB: Links -->
     <div class="tab-panel" id="panel-links">
-      <div style="max-width:56rem;margin-inline:auto;">
+      <div style="width:100%; margin:0 auto;">
         <div class="section-title-center">
           <h3 id="links-title"></h3>
           <p id="links-subtitle"></p>
@@ -2168,7 +2772,7 @@
 
     <!-- TAB: Drivers -->
     <div class="tab-panel" id="panel-drivers">
-      <div style="max-width:56rem;margin-inline:auto;">
+      <div style="width:100%; margin:0 auto;">
         <div class="section-title-center">
           <h3 id="drivers-title"></h3>
           <p id="drivers-subtitle"></p>
@@ -2222,7 +2826,7 @@
           <polyline points="7 10 12 15 17 10" />
           <line x1="12" y1="15" x2="12" y2="3" />
         </svg>
-        <span>EasyInstall Pro <span class="version-badge" style="font-size:0.55rem;">v9</span></span>
+        <span>YAKAN PRO <span class="version-badge" style="font-size:0.55rem;">v18</span></span>
       </div>
       <p class="footer-author" id="footer-author"></p>
       <div class="footer-contact">
@@ -2254,68 +2858,86 @@
 
     try {
       // =====================================================================
-      // PARTICLE ANIMATION
+      // GALAXY STARFIELD (GPU-accelerated, mouse parallax)
       // =====================================================================
       (function () {
         var canvas = document.getElementById('particles-canvas');
         var ctx = canvas.getContext('2d');
-        var particles = [];
-        var particleCount = 40;
-        var mouseX = -1000, mouseY = -1000;
+        var W, H, stars = [];
+        var mouseRX = 0.5, mouseRY = 0.5; // normalized 0-1
+        var STAR_COLORS = ['255,255,255','200,215,255','255,225,200','180,200,255','220,180,255'];
 
         function resize() {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener('resize', resize);
-
-        document.addEventListener('mousemove', function (e) { mouseX = e.clientX; mouseY = e.clientY; });
-
-        function Particle() {
-          this.x = Math.random() * canvas.width;
-          this.y = Math.random() * canvas.height;
-          this.vx = (Math.random() - 0.5) * 0.4;
-          this.vy = (Math.random() - 0.5) * 0.4;
-          this.radius = Math.random() * 1.5 + 0.5;
-          this.opacity = Math.random() * 0.5 + 0.1;
+          W = canvas.width = window.innerWidth;
+          H = canvas.height = window.innerHeight;
         }
 
-        for (var i = 0; i < particleCount; i++) particles.push(new Particle());
+        function makeStar(layer) {
+          var sizes = [0.6, 1.2, 2.2];
+          var parallax = [0.6, 1.8, 4.0];
+          return {
+            px: Math.random(), py: Math.random(), // normalized base position
+            size: Math.random() * sizes[layer] + 0.15,
+            op: Math.random() * 0.55 + 0.25,
+            tw: Math.random() * 0.025 + 0.006, // twinkle speed
+            to: Math.random() * Math.PI * 2,   // twinkle offset
+            pf: parallax[layer],               // parallax factor (px shift per 1 mouse unit)
+            col: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)],
+            big: (layer === 2 && Math.random() > 0.55)
+          };
+        }
 
-        function animate() {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          particles.forEach(function (p) {
-            p.x += p.vx; p.y += p.vy;
-            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        function init() {
+          resize();
+          stars = [];
+          for (var i = 0; i < 200; i++) stars.push(makeStar(0)); // far
+          for (var i = 0; i < 100; i++) stars.push(makeStar(1)); // mid
+          for (var i = 0; i < 45; i++)  stars.push(makeStar(2)); // near
+        }
 
+        var tick = 0;
+        function draw() {
+          ctx.clearRect(0, 0, W, H);
+          tick += 0.012;
+          var mx = (mouseRX - 0.5), my = (mouseRY - 0.5); // -0.5 to +0.5
+          for (var i = 0; i < stars.length; i++) {
+            var s = stars[i];
+            var twinkle = s.op + Math.sin(tick * s.tw * 80 + s.to) * 0.18;
+            if (twinkle < 0.08) twinkle = 0.08;
+            if (twinkle > 1) twinkle = 1;
+            
+            // Wavy motion (sin/cos mix)
+            var waveX = Math.sin(tick * 0.4 + s.py * 8) * 20;
+            var waveY = Math.cos(tick * 0.35 + s.px * 6) * 15;
+            
+            var x = (s.px * W + mx * s.pf * 60 + waveX + W) % W;
+            var y = (s.py * H + my * s.pf * 60 + waveY + H) % H;
+            
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(96, 165, 250, ' + p.opacity + ')';
-            ctx.fill();
-          });
-
-          // connections
-          for (var i = 0; i < particles.length; i++) {
-            for (var j = i + 1; j < particles.length; j++) {
-              var dx = particles[i].x - particles[j].x;
-              var dy = particles[i].y - particles[j].y;
-              var dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist < 150) {
-                ctx.beginPath();
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = 'rgba(96, 165, 250, ' + (0.08 * (1 - dist / 150)) + ')';
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-              }
+            ctx.arc(x, y, s.size, 0, 6.2832);
+            ctx.fillStyle = 'rgba(' + s.col + ',' + twinkle + ')';
+            if (s.big) {
+              ctx.shadowBlur = 8;
+              ctx.shadowColor = 'rgba(' + s.col + ',0.6)';
             }
+            ctx.fill();
+            if (s.big) ctx.shadowBlur = 0;
           }
-
-          requestAnimationFrame(animate);
+          requestAnimationFrame(draw);
         }
-        animate();
+
+        document.addEventListener('mousemove', function (e) {
+          mouseRX = e.clientX / window.innerWidth;
+          mouseRY = e.clientY / window.innerHeight;
+        }, { passive: true });
+
+        window.addEventListener('resize', function () {
+          resize();
+          stars.forEach(function (s) { s.px = Math.random(); s.py = Math.random(); });
+        }, { passive: true });
+
+        init();
+        draw();
       })();
 
       // =====================================================================
@@ -2336,7 +2958,7 @@
         { id: '7zip', name: '7-Zip 24.08 (x64)', wingetId: '7zip.7zip', category: 'Utilities', icon: 'Archive', logo: 'https://icon.horse/icon/7-zip.org', url: 'https://www.7-zip.org/' },
         { id: 'idm', name: 'Internet Download Manager 6.42', wingetId: 'Tonec.InternetDownloadManager', category: 'Utilities', icon: 'Download', logo: 'https://icon.horse/icon/internetdownloadmanager.com', url: 'https://www.internetdownloadmanager.com/' },
         { id: 'googledrive', name: 'Google Drive (Latest)', wingetId: 'Google.GoogleDrive', category: 'Utilities', icon: 'Download', logo: 'https://icon.horse/icon/drive.google.com', url: 'https://www.google.com/drive/download/' },
-        { id: 'rustdesk', name: 'RustDesk 1.4.6 (Latest)', wingetId: 'RustDesk.RustDesk', category: 'Utilities', icon: 'Monitor', logo: 'https://icon.horse/icon/rustdesk.com', url: 'https://rustdesk.com/' },
+        { id: 'rustdesk', name: 'RustDesk 1.4.6 (Latest)', wingetId: 'RustDesk.RustDesk', category: 'Utilities', icon: 'Monitor', logo: 'https://icon.horse/icon/rustdesk.com', url: 'https://rustdesk.com/', directUrl: 'https://github.com/rustdesk/rustdesk/releases/download/1.4.6/rustdesk-1.4.6-x86_64.exe' },
         { id: 'powertoys', name: 'Microsoft PowerToys 0.81.1', wingetId: 'Microsoft.PowerToys', category: 'Utilities', icon: 'Settings', logo: 'https://icon.horse/icon/microsoft.com', url: 'https://apps.microsoft.com/store/detail/microsoft-powertoys/XP89DCGQ3K6VLD' },
         { id: 'snappy', name: 'Snappy Driver Installer Origin (سيظهر باسم SDIO.exe)', wingetId: 'GlennDelahoy.SnappyDriverInstallerOrigin', category: 'Utilities', icon: 'Download', logo: 'https://icon.horse/icon/snappy-driver-installer.en.lo4d.com', url: 'https://www.glenn.delahoy.com/snappy-driver-installer-origin/' },
         { id: 'adobe-reader', name: 'Adobe Acrobat Reader (Latest)', wingetId: 'Adobe.Acrobat.Reader.64-bit', category: 'Utilities', icon: 'FileText', logo: 'https://icon.horse/icon/adobe.com', url: 'https://get.adobe.com/reader/' },
@@ -2344,12 +2966,12 @@
         { id: 'revo', name: 'Revo Uninstaller Free', wingetId: 'VSRevoGroup.RevoUninstaller', category: 'Utilities', icon: 'Trash2', logo: 'https://icons.duckduckgo.com/ip3/revouninstaller.com.ico', url: 'https://www.revouninstaller.com/revo-uninstaller-free-download/' },
         { id: 'windirstat', name: 'WinDirStat', wingetId: 'WinDirStat.WinDirStat', category: 'Utilities', icon: 'BarChart', logo: 'https://icon.horse/icon/windirstat.net', url: 'https://windirstat.net/' },
         { id: 'foxit-reader', name: 'Foxit PDF Reader (Latest)', wingetId: 'Foxit.FoxitReader', category: 'Utilities', icon: 'FileText', logo: 'https://icon.horse/icon/foxit.com', url: 'https://www.foxit.com/pdf-reader/' },
-        { id: 'libreoffice', name: 'LibreOffice (Latest)', wingetId: 'TheDocumentFoundation.LibreOffice', category: 'Utilities', icon: 'FileText', logo: 'https://icon.horse/icon/libreoffice.org', url: 'https://www.libreoffice.org/' },
+        { id: 'libreoffice', name: 'LibreOffice (Latest)', wingetId: 'TheDocumentFoundation.LibreOffice', category: 'Utilities', icon: 'FileText', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5a/LibreOffice_7.5_logo.svg', url: 'https://www.libreoffice.org/' },
         {
-          id: 'ventoy', name: 'Ventoy (Latest)', wingetId: 'Ventoy.Ventoy', category: 'Utilities', icon: 'Download', logo: 'https://icons.duckduckgo.com/ip3/ventoy.net.ico', url: 'https://www.ventoy.net/',
+          id: 'ventoy', name: 'Ventoy (Latest)', wingetId: 'Ventoy.Ventoy', category: 'Utilities', icon: 'Download', logo: 'https://avatars.githubusercontent.com/u/61823153?s=200&v=4', url: 'https://www.ventoy.net/',
           postInstallCmd: '$ventoyFile = Get-ChildItem -Path "$env:LOCALAPPDATA\\Microsoft\\WinGet\\Packages\\Ventoy.Ventoy*" -Filter "Ventoy2Disk.exe" -Recurse | Select-Object -First 1\nif ($ventoyFile) {\n    $desktopPath = [System.IO.Path]::Combine([Environment]::GetFolderPath("Desktop"), "Ventoy.lnk")\n    $wshell = New-Object -ComObject WScript.Shell\n    $shortcut = $wshell.CreateShortcut($desktopPath)\n    $shortcut.TargetPath = $ventoyFile.FullName\n    $shortcut.WorkingDirectory = $ventoyFile.DirectoryName\n    $shortcut.Save()\n    Write-Host "\u2705 تم إنشاء اختصار Ventoy على سطح المكتب بنجاح!" -ForegroundColor Green\n} else {\n    Write-Host "\u274c لم يتم العثور على البرنامج، تأكد من تثبيته أولاً." -ForegroundColor Red\n}'
         },
-        { id: 'anydesk', name: 'AnyDesk (Latest)', wingetId: 'AnyDeskSoftwareGmbH.AnyDesk', category: 'Utilities', icon: 'Monitor', logo: 'https://icon.horse/icon/anydesk.com', url: 'https://anydesk.com/' },
+        { id: 'anydesk', name: 'AnyDesk (Latest)', wingetId: 'AnyDeskSoftwareGmbH.AnyDesk', category: 'Utilities', icon: 'Monitor', logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d0/AnyDesk_Logo.svg', url: 'https://anydesk.com/' },
         // Development
         { id: 'vscode', name: 'Visual Studio Code 1.89', wingetId: 'Microsoft.VisualStudioCode', category: 'Development', icon: 'Code', logo: 'https://icon.horse/icon/code.visualstudio.com', url: 'https://code.visualstudio.com/' },
         { id: 'cursor', name: 'Cursor AI Editor (Latest)', wingetId: 'Anysphere.Cursor', category: 'Development', icon: 'Code', logo: 'https://icon.horse/icon/cursor.sh', url: 'https://cursor.sh/' },
@@ -2363,7 +2985,7 @@
         // Communication
         { id: 'discord', name: 'Discord (Latest)', wingetId: 'Discord.Discord', category: 'Communication', icon: 'MessageSquare', logo: 'https://icon.horse/icon/discord.com', url: 'https://discord.com/' },
         { id: 'telegram', name: 'Telegram Desktop 5.1.7', wingetId: 'Telegram.TelegramDesktop', category: 'Communication', icon: 'Send', logo: 'https://icon.horse/icon/telegram.org', url: 'https://desktop.telegram.org/' },
-        { id: 'whatsapp', name: 'WhatsApp Desktop (Latest)', wingetId: 'WhatsApp.WhatsApp', category: 'Communication', icon: 'MessageCircle', logo: 'https://icon.horse/icon/web.whatsapp.com', url: 'https://www.whatsapp.com/download' },
+        { id: 'whatsapp', name: 'WhatsApp Desktop (Latest)', wingetId: 'WhatsApp.WhatsApp', category: 'Communication', icon: 'MessageCircle', logo: 'https://icon.horse/icon/web.whatsapp.com', url: 'https://www.whatsapp.com/download', directUrl: 'https://get.microsoft.com/installer/download/9NKSQGP7F2NH?cid=website_cta_psi' },
         { id: 'zoom', name: 'Zoom Workplace 6.0.10', wingetId: 'Zoom.Zoom', category: 'Communication', icon: 'Video', logo: 'https://icon.horse/icon/zoom.us', url: 'https://zoom.us/' },
         { id: 'slack', name: 'Slack 4.38.115', wingetId: 'SlackTechnologies.Slack', category: 'Communication', icon: 'MessageSquare', logo: 'https://icon.horse/icon/slack.com', url: 'https://slack.com/' },
         // Security
@@ -2422,7 +3044,7 @@
 
       var TRANSLATIONS = {
         ar: {
-          title: 'EasyInstall Pro', subtitle: 'مثبت ويندوز الصامت',
+          title: 'YAKAN PRO', subtitle: 'مثبت ويندوز الصامت',
           heroTitle: 'أتمتة إعداد <span class="gradient-text">ويندوز الخاص بك</span>',
           heroSubtitle: 'اختر تطبيقاتك المفضلة وقم بتوليد أمر واحد لتثبيتها جميعاً بصمت. لا داعي لتحميل ملفات التثبيت أو الضغط على زر "التالي".',
           allUpdated: 'جميع البرامج محدثة تلقائياً',
@@ -2477,7 +3099,7 @@
           }
         },
         en: {
-          title: 'EasyInstall Pro', subtitle: 'Silent Windows Installer',
+          title: 'YAKAN PRO', subtitle: 'Silent Windows Installer',
           heroTitle: 'Automate your <span class="gradient-text">Windows Setup</span>',
           heroSubtitle: "Select your favorite apps and generate a single command to install them all silently. No installers to download, no \"Next\" buttons to click.",
           allUpdated: 'All programs are updated automatically',
@@ -2532,7 +3154,7 @@
           }
         },
         tr: {
-          title: 'EasyInstall Pro', subtitle: 'Sessiz Windows Yükleyici',
+          title: 'YAKAN PRO', subtitle: 'Sessiz Windows Yükleyici',
           heroTitle: '<span class="gradient-text">Windows Kurulumunuzu</span> Otomatikleştirin',
           heroSubtitle: "Favori uygulamalarınızı seçin ve hepsini sessizce yüklemek için tek bir komut oluşturun. Yükleyici indirmeye, \"İleri\" düğmelerine tıklamaya gerek yok.",
           allUpdated: 'Tüm programlar otomatik olarak güncellenir',
@@ -2855,9 +3477,6 @@
         document.documentElement.lang = state.lang;
         document.body.dir = isRtl ? 'rtl' : 'ltr';
 
-        // Header
-        document.getElementById('hdr-subtitle').textContent = t.subtitle;
-
         // Lang buttons
         ['ar', 'en', 'tr'].forEach(function (l) {
           var btn = document.getElementById('lang-' + l);
@@ -2870,45 +3489,42 @@
           if (el) el.placeholder = t.searchPlaceholder;
         });
 
-        // Hero
-        document.getElementById('hero-title').innerHTML = t.heroTitle;
-        document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
-        document.getElementById('badge-all-updated').textContent = t.allUpdated;
-        document.getElementById('badge-secure').textContent = t.secureSource;
+        // Navbar stats pills
+        var hstatDesc = document.getElementById('hstat-desc');
+        if (hstatDesc) hstatDesc.textContent = t.allUpdated;
+        var saLabel = document.getElementById('stat-apps-label');
+        if (saLabel) saLabel.textContent = t.statApps;
+        var scLabel = document.getElementById('stat-commands-label');
+        if (scLabel) scLabel.textContent = t.statCommands;
+        var slLabel = document.getElementById('stat-langs-label');
+        if (slLabel) slLabel.textContent = t.statLangs;
 
-        // Hero stats
-        document.getElementById('stat-apps-label').textContent = t.statApps;
-        document.getElementById('stat-commands-label').textContent = t.statCommands;
-        document.getElementById('stat-langs-label').textContent = t.statLangs;
-
-        // Tabs
-        document.getElementById('tab-install').querySelector('span:last-child').textContent = t.tabInstall;
-        document.getElementById('tab-extra').querySelector('span:last-child').textContent = t.tabExtra;
-        document.getElementById('tab-links').querySelector('span:last-child').textContent = t.tabLinks;
-        document.getElementById('tab-drivers').querySelector('span:last-child').textContent = t.tabDrivers;
-        document.getElementById('drive-link-text').textContent = t.driveLink;
-
-        // Tab active states
-        document.querySelectorAll('.tab-btn').forEach(function (btn) {
+        // Tab buttons (new .nav-tab-btn)
+        document.querySelectorAll('.nav-tab-btn').forEach(function (btn) {
           btn.classList.toggle('active', btn.dataset.tab === state.activeTab);
         });
+        document.getElementById('tab-install').querySelector('span').textContent = t.tabInstall;
+        document.getElementById('tab-extra').querySelector('span').textContent = t.tabExtra;
+        document.getElementById('tab-links').querySelector('span').textContent = t.tabLinks;
+        document.getElementById('tab-drivers').querySelector('span').textContent = t.tabDrivers;
+        document.getElementById('drive-link-text').textContent = t.driveLink;
+
+        // Show/hide cat strip only on install tab
+        var catStrip = document.getElementById('cat-strip');
+        var isInstall = state.activeTab === 'install';
+        if (catStrip) catStrip.classList.toggle('visible', isInstall);
 
         // Panels
         document.querySelectorAll('.tab-panel').forEach(function (p) {
           p.classList.toggle('active', p.id === 'panel-' + state.activeTab);
         });
 
-        // Sidebar
-        document.getElementById('cat-label').textContent = t.categories;
-        document.getElementById('quick-tip-title').textContent = t.quickTip;
-        document.getElementById('quick-tip-body').textContent = t.adminTip;
-
         // Search shortcut visibility
         var shortcut = document.getElementById('search-shortcut');
         var searchVal = document.getElementById('search-desktop').value;
         if (shortcut) shortcut.style.display = searchVal ? 'none' : 'block';
 
-        renderCategoryNav();
+        renderNavCats();
         renderSoftwareGrid();
         renderExtraGrid();
         renderLinksGrid();
@@ -2919,22 +3535,34 @@
         saveState();
       }
 
-      function renderCategoryNav() {
-        var t = getT();
-        var nav = document.getElementById('cat-nav');
-        var isRtl = state.lang === 'ar';
+      // Category icon/color config (v15)
+      var CAT_CONFIG = {
+        'All':           { path: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>',                       color: '#60a5fa', bg: 'rgba(59,130,246,0.15)',   border: 'rgba(59,130,246,0.3)' },
+        'Browsers':      { path: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',  color: '#fbbf24', bg: 'rgba(251,191,36,0.15)',  border: 'rgba(251,191,36,0.3)' },
+        'Media':         { path: '<circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>',                                                                                                                               color: '#a78bfa', bg: 'rgba(139,92,246,0.15)',  border: 'rgba(139,92,246,0.3)' },
+        'Utilities':     { path: '<circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M2 12h2M20 12h2"/>',                                     color: '#22d3ee', bg: 'rgba(6,182,212,0.15)',   border: 'rgba(6,182,212,0.3)'  },
+        'Development':   { path: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',                                                                                                                                    color: '#34d399', bg: 'rgba(16,185,129,0.15)', border: 'rgba(16,185,129,0.3)' },
+        'Communication': { path: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',                                                                                                                              color: '#818cf8', bg: 'rgba(99,102,241,0.15)',  border: 'rgba(99,102,241,0.3)' },
+        'Security':      { path: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',                                                                                                                                                   color: '#fb7185', bg: 'rgba(244,63,94,0.15)',   border: 'rgba(244,63,94,0.3)'  },
+        'Design':        { path: '<circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.437-.652-.437-1.125A1.64 1.64 0 0 1 14.461 16.5h2c3.051 0 5.539-2.503 5.539-5.556C21.943 6.012 17.461 2 12 2z"/>',  color: '#f472b6', bg: 'rgba(236,72,153,0.15)',  border: 'rgba(236,72,153,0.3)' }
+      };
+
+      function renderNavCats() {
+        var strip = document.getElementById('cat-strip-inner');
+        if (!strip) return;
         var categories = getCategories();
         var html = '';
         categories.forEach(function (cat) {
           var isActive = state.activeCategory === cat;
-          var count = getCategoryCount(cat);
-          html += '<button class="cat-btn' + (isActive ? ' active' : '') + '" data-cat="' + cat + '">';
+          var cfg = CAT_CONFIG[cat] || CAT_CONFIG['All'];
+          var chipStyle = 'style="--chip-color:' + cfg.color + ';color:' + (isActive ? cfg.color : '') + ';background:' + (isActive ? cfg.bg : 'transparent') + ';border-color:' + (isActive ? cfg.border : 'transparent') + ';box-shadow:0 0 ' + (isActive ? '18px -3px' : '8px -4px') + ' ' + cfg.color + '"';
+          html += '<button class="cat-chip' + (isActive ? ' active' : '') + '" data-cat="' + cat + '" ' + chipStyle + '>';
+          html += '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">' + cfg.path + '</svg>';
           html += '<span>' + getCatTranslation(cat) + '</span>';
-          html += '<span class="cat-count">' + count + '</span>';
           html += '</button>';
         });
-        nav.innerHTML = html;
-        nav.querySelectorAll('.cat-btn').forEach(function (btn) {
+        strip.innerHTML = html;
+        strip.querySelectorAll('.cat-chip').forEach(function (btn) {
           btn.addEventListener('click', function () {
             state.activeCategory = this.dataset.cat;
             renderAll();
@@ -2976,7 +3604,9 @@
         var html = '';
         filtered.forEach(function (sw, idx) {
           var isSel = !!state.selectedIds[sw.id];
-          html += '<div class="sw-card' + (isSel ? ' selected' : '') + '" data-id="' + sw.id + '" id="swcard-' + sw.id + '" style="animation-delay:' + (idx * 0.03) + 's">';
+          var hasDirectUrl = !!sw.directUrl;
+          var cardClass = 'sw-card' + (isSel ? ' selected' : '') + (hasDirectUrl ? ' direct-url-card' : '');
+          html += '<div class="' + cardClass + '" data-id="' + sw.id + '" data-direct-url="' + (sw.directUrl || '') + '" id="swcard-' + sw.id + '" style="animation-delay:' + (idx * 0.03) + 's">';
           html += '<div class="sw-card-top">';
           html += '<div class="sw-icon-wrap">';
           if (sw.logo) {
@@ -2986,11 +3616,16 @@
             html += '<span style="display:flex;align-items:center;justify-content:center;color:var(--slate-500);">' + svgIcon('globe', 24) + '</span>';
           }
           html += '</div>';
-          html += '<div class="sw-check">' + (isSel ? svgIcon('check', 12) : '') + '</div>';
+          if (hasDirectUrl) {
+            html += '<div class="sw-check" style="background:linear-gradient(135deg,var(--emerald-500),var(--cyan-400));display:flex;">' + svgIcon('externallink', 12) + '</div>';
+          } else {
+            html += '<div class="sw-check">' + (isSel ? svgIcon('check', 12) : '') + '</div>';
+          }
           html += '</div>';
           html += '<h4>' + esc(sw.name) + '</h4>';
           html += '<p class="sw-winget">' + esc(sw.wingetId) + '</p>';
-          html += '<a href="' + sw.url + '" target="_blank" rel="noopener noreferrer" class="sw-link" onclick="event.stopPropagation();">' + svgIcon('externallink', 10) + ' ' + esc(t.visitSite) + '</a>';
+          var linkHref = sw.directUrl || sw.url;
+          html += '<a href="' + linkHref + '" target="_blank" rel="noopener noreferrer" class="sw-link" onclick="event.stopPropagation();">' + svgIcon('externallink', 10) + ' ' + esc(t.visitSite) + '</a>';
           html += '</div>';
         });
         grid.innerHTML = html;
@@ -2998,8 +3633,26 @@
         grid.querySelectorAll('.sw-card').forEach(function (card) {
           card.addEventListener('click', function () {
             var id = this.dataset.id;
+            var directUrl = this.dataset.directUrl;
+            if (directUrl) {
+              window.open(directUrl, '_blank', 'noopener,noreferrer');
+              return;
+            }
             state.selectedIds[id] = !state.selectedIds[id];
-            renderAll();
+            
+            // v16: Clear search, re-render, and maintain focus after selecting
+            var searchInput = document.getElementById('search-desktop');
+            var searchMobile = document.getElementById('search-mobile');
+            if (state.searchQuery) {
+              state.searchQuery = '';
+              if (searchInput) searchInput.value = '';
+              if (searchMobile) searchMobile.value = '';
+              renderAll();
+              if (searchInput && window.innerWidth >= 640) searchInput.focus();
+              else if (searchMobile) searchMobile.focus();
+            } else {
+              renderAll();
+            }
           });
         });
       }
@@ -3048,7 +3701,20 @@
           card.addEventListener('click', function () {
             var id = this.dataset.id;
             state.selectedExtraIds[id] = !state.selectedExtraIds[id];
-            renderAll();
+            
+            // v16: Clear search, re-render, and maintain focus after selecting
+            var searchInput = document.getElementById('search-desktop');
+            var searchMobile = document.getElementById('search-mobile');
+            if (state.searchQuery) {
+              state.searchQuery = '';
+              if (searchInput) searchInput.value = '';
+              if (searchMobile) searchMobile.value = '';
+              renderAll();
+              if (searchInput && window.innerWidth >= 640) searchInput.focus();
+              else if (searchMobile) searchMobile.focus();
+            } else {
+              renderAll();
+            }
           });
         });
       }
@@ -3138,7 +3804,7 @@
 
         var showBtn = document.getElementById('show-cmd-btn');
         showBtn.textContent = state.showCommand ? t.hideCommand : t.showCommand;
-        
+
         var floatingClear = document.getElementById('floating-clear-btn');
         if (floatingClear) {
           floatingClear.textContent = t.clearSelection;
@@ -3231,8 +3897,8 @@
         });
       });
 
-      // Tab buttons
-      document.querySelectorAll('.tab-btn').forEach(function (btn) {
+      // Tab buttons (nav-tab-btn)
+      document.querySelectorAll('.nav-tab-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
           state.activeTab = this.dataset.tab;
           state.showCommand = false;
@@ -3364,6 +4030,66 @@
       });
 
       // =====================================================================
+      // THEME TOGGLE v15
+      // =====================================================================
+      var EIP_THEME_KEY = 'eip_theme_v15';
+      function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        var sunEl = document.getElementById('icon-sun');
+        var moonEl = document.getElementById('icon-moon');
+        if (theme === 'dark') {
+          if (sunEl) sunEl.classList.remove('hidden');
+          if (moonEl) moonEl.classList.add('hidden');
+        } else {
+          if (sunEl) sunEl.classList.add('hidden');
+          if (moonEl) moonEl.classList.remove('hidden');
+        }
+      }
+      applyTheme(localStorage.getItem(EIP_THEME_KEY) || 'dark');
+      var _themeBtn = document.getElementById('theme-toggle');
+      if (_themeBtn) {
+        _themeBtn.addEventListener('click', function () {
+          var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          localStorage.setItem(EIP_THEME_KEY, next);
+          applyTheme(next);
+        });
+      }
+
+      // =====================================================================
+      // CURSOR GLOW  (GPU-accelerated, desktop only)
+      // =====================================================================
+      if (!('ontouchstart' in window) && window.matchMedia('(hover: hover)').matches) {
+        var _gEl = document.createElement('div');
+        _gEl.id = 'cursor-glow';
+        document.body.appendChild(_gEl);
+        var _gx = innerWidth / 2, _gy = innerHeight / 2, _cx = _gx, _cy = _gy;
+        document.addEventListener('mousemove', function (e) {
+          _gx = e.clientX; _gy = e.clientY; _gEl.style.opacity = '1';
+        }, { passive: true });
+        document.addEventListener('mouseleave', function () { _gEl.style.opacity = '0'; }, { passive: true });
+        (function loop() {
+          _cx += (_gx - _cx) * 0.09; _cy += (_gy - _cy) * 0.09;
+          _gEl.style.transform = 'translate3d(' + (_cx - 200) + 'px,' + (_cy - 200) + 'px,0)';
+          requestAnimationFrame(loop);
+        })();
+      }
+
+      // =====================================================================
+      // "/" KEY: Focus search
+      // =====================================================================
+      document.addEventListener('keydown', function (e) {
+        var tag = document.activeElement ? document.activeElement.tagName : '';
+        if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+          e.preventDefault();
+          var s = document.getElementById('search-desktop');
+          if (s) { s.focus(); s.select(); }
+        }
+        if (e.key === 'Escape' && document.activeElement && document.activeElement.id === 'search-desktop') {
+          document.activeElement.blur();
+        }
+      });
+
+      // =====================================================================
       // INIT
       // =====================================================================
       renderAll();
@@ -3375,7 +4101,7 @@
       }, 300);
 
     } catch (e) {
-      console.error('EasyInstall Pro init error:', e);
+      console.error('YAKAN PRO init error:', e);
     }
   </script>
 </body>
